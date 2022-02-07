@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="594" height="594" viewBox="0 0 594 594">
+  <g id="Group_9" data-name="Group 9" transform="translate(0.406 0.567)">
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="297" cy="297" r="297" transform="translate(-0.406 -0.567)" fill="#f56968"/>
+    <g id="arrow_forward_ios_black_48dp" transform="translate(175.222 125.089)">
+      <g id="Group_7" data-name="Group 7" transform="translate(0 0)">
+        <g id="Group_6" data-name="Group 6" transform="translate(0 0)">
+          <rect id="Rectangle_2" data-name="Rectangle 2" width="351" height="351" transform="translate(0.371 0.343)" fill="none"/>
+        </g>
+      </g>
+      <g id="Group_8" data-name="Group 8" transform="translate(86.109 38.745)">
+        <path id="Path_32" data-name="Path 32" d="M10.18,265.935h0a17.645,17.645,0,0,0,24.983,0L151.927,149.17a17.645,17.645,0,0,0,0-24.983L35.34,7.6a17.645,17.645,0,0,0-24.983,0h0a17.489,17.489,0,0,0-.177,24.983L114.364,136.767,10.18,240.952A17.645,17.645,0,0,0,10.18,265.935Z" transform="translate(-4.997 -2.418)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="arrow_forward_ios_black_48dp-2" data-name="arrow_forward_ios_black_48dp" transform="translate(133.406 175.269)">
+      <g id="Group_7-2" data-name="Group 7" transform="translate(0 0)">
+        <g id="Group_6-2" data-name="Group 6">
+          <rect id="Rectangle_2-2" data-name="Rectangle 2" width="242" height="242" transform="translate(0.188 0.163)" fill="none"/>
+        </g>
+      </g>
+      <g id="Group_8-2" data-name="Group 8" transform="translate(69.662 34.477)">
+        <path id="Path_32-2" data-name="Path 32" d="M8.435,177.187h0a11.7,11.7,0,0,0,16.569,0l77.44-77.44a11.7,11.7,0,0,0,0-16.569L25.121,5.855a11.7,11.7,0,0,0-16.569,0h0a11.6,11.6,0,0,0-.118,16.569l69.1,69.1-69.1,69.1A11.7,11.7,0,0,0,8.435,177.187Z" transform="translate(-4.998 -2.418)" fill="rgba(255,255,255,0.61)"/>
+      </g>
+    </g>
+  </g>
+</svg>
