@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto"
+	  xmlns:tools="http://schemas.android.com/tools">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  tools:context=".auth.AuthFragment">
+
+
+		<TextView
+			  android:id="@+id/textView4"
+			  style="@style/HeadingStyle"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="@dimen/edit_button_height"
+			  android:text="@string/auth_info"
+			  android:textSize="@dimen/text_content"
+			  app:layout_constraintBottom_toTopOf="@+id/editEmail"
+			  app:layout_constraintEnd_toEndOf="@+id/editEmail"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/editEmail"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.706" />
+
+		<TextView
+			  android:id="@+id/textView2"
+			  style="@style/HeadingStyle"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="46dp"
+			  android:text="@string/auth_title"
+			  android:textColor="@color/light_black"
+			  android:textSize="@dimen/text_heading2"
+			  app:layout_constraintBottom_toTopOf="@+id/textView4"
+			  app:layout_constraintEnd_toEndOf="@+id/textView4"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/textView4"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="1.0" />
+
+		<EditText
+			  android:id="@+id/editEmail"
+			  style="@style/AltHeadingStyle"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="@dimen/edit_button_height"
+			  android:background="@drawable/buttonborder"
+			  android:ems="10"
+			  android:hint="@string/email"
+			  android:inputType="textEmailAddress"
+			  app:layout_constraintBottom_toTopOf="@+id/editPassword"
+			  app:layout_constraintEnd_toEndOf="@+id/editPassword"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/editPassword"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.869" />
+
+		<EditText
+			  android:id="@+id/editPassword"
+			  style="@style/AltHeadingStyle"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="@dimen/edit_button_height"
+			  android:background="@drawable/buttonborder"
+			  android:ems="10"
+			  android:hint="@string/password"
+			  android:inputType="textPassword"
+			  app:layout_constraintBottom_toTopOf="@+id/errorBox"
+			  app:layout_constraintEnd_toEndOf="@+id/forgotPassBox"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/forgotPassBox"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.85" />
+
+		<TextView
+			  android:id="@+id/submitButton"
+			  style="@style/AltHeadingStyle"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="@dimen/edit_button_height"
+			  android:background="@drawable/buttoncurved"
+			  android:text="@string/submit"
+			  android:textAlignment="center"
+			  android:textColor="@color/white"
+			  app:layout_constraintBottom_toTopOf="@+id/textView6"
+			  app:layout_constraintEnd_toEndOf="@+id/imageView2"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/imageView"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.942" />
+
+		<TextView
+			  android:id="@+id/textView6"
+			  android:layout_width="@dimen/sso_text_box"
+			  android:layout_height="wrap_content"
+			  android:text="@string/auth_sso_title"
+			  android:textAlignment="center"
+			  android:textColor="@color/light_grey"
+			  android:textSize="@dimen/sso_text_size"
+			  app:layout_constraintBottom_toTopOf="@+id/imageView3"
+			  app:layout_constraintEnd_toEndOf="@+id/imageView4"
+			  app:layout_constraintHorizontal_bias="0.498"
+			  app:layout_constraintStart_toStartOf="@+id/imageView3"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.917" />
+
+		<ImageView
+			  android:id="@+id/imageView"
+			  android:layout_width="@dimen/sso_line"
+			  android:layout_height="wrap_content"
+			  app:layout_constraintBottom_toTopOf="@+id/imageView3"
+			  app:layout_constraintEnd_toStartOf="@+id/textView6"
+			  app:layout_constraintHorizontal_bias="1.0"
+			  app:layout_constraintStart_toStartOf="parent"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.903"
+			  app:srcCompat="@drawable/auth_sso_line_left" />
+
+		<ImageView
+			  android:id="@+id/imageView2"
+			  android:layout_width="@dimen/sso_line"
+			  android:layout_height="2dp"
+			  app:layout_constraintBottom_toTopOf="@+id/imageView3"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toEndOf="@+id/textView6"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.903"
+			  app:srcCompat="@drawable/auth_sso_line_right" />
+
+		<ImageView
+			  android:id="@+id/imageView3"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.357"
+			  app:layout_constraintStart_toStartOf="parent"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.899"
+			  app:srcCompat="@drawable/google_logo" />
+
+		<ImageView
+			  android:id="@+id/imageView4"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.64"
+			  app:layout_constraintStart_toStartOf="parent"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.899"
+			  app:srcCompat="@drawable/facebook_logo" />
+
+		<TextView
+			  android:id="@+id/errorBox"
+			  style="@style/MainBody"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="40dp"
+			  android:textAlignment="center"
+			  android:textColor="@color/medium_red"
+			  app:layout_constraintBottom_toTopOf="@+id/submitButton"
+			  app:layout_constraintEnd_toEndOf="@+id/submitButton"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/submitButton"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.973" />
+
+		<TextView
+			  android:id="@+id/forgotPassBox"
+			  style="@style/MainBody"
+			  android:layout_width="@dimen/edit_button_width"
+			  android:layout_height="24dp"
+			  android:text="@string/auth_forgot_password"
+			  android:textAlignment="viewEnd"
+			  android:textColor="@color/light_black"
+			  android:textSize="@dimen/text_content"
+			  app:layout_constraintBottom_toTopOf="@+id/errorBox"
+			  app:layout_constraintEnd_toEndOf="@+id/errorBox"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/errorBox"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.95" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
