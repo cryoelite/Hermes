@@ -1,22 +1,34 @@
-package com.itscryo.hermes.service
+package com.itscryo.hermes.repository
 
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.itscryo.hermes.domain.IAuthRepository
 import com.itscryo.hermes.model.AuthUserData
 import com.itscryo.hermes.model.UserData
+import com.itscryo.hermes.service.asDeferredAsync
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import javax.inject.Inject
 
 
-class FirebaseAuthRepository private constructor(private val firebaseAuth: FirebaseAuth) :
-	IAuthRepository {
-	companion object {
-		fun create(): FirebaseAuthRepository {
-			return FirebaseAuthRepository(Firebase.auth);
-		}
-	}
+@Module
+@InstallIn(ActivityComponent::class)
+abstract class FirebaseAuthModule {
+
+	@Binds
+	abstract fun bindFirebaseAuth(
+		authImpl: FirebaseAuthRepository
+	): IAuthRepository
+}
+
+class FirebaseAuthRepository @Inject constructor() : IAuthRepository {
+	private val firebaseAuth: FirebaseAuth = Firebase.auth
 
 	override suspend fun signInAsync(user: AuthUserData): Deferred<UserData> {
 		val deferred = CompletableDeferred<UserData>()
@@ -75,4 +87,5 @@ class FirebaseAuthRepository private constructor(private val firebaseAuth: Fireb
 		}
 		return deferred
 	}
+
 }

@@ -39,6 +39,6 @@
 		  android:id="@+id/inboxFragment"
 		  android:name="com.itscryo.hermes.inbox.InboxFragment"
 		  android:label="InboxFragment"
-		  tools:layout="@layout/fragment_auth"
+		  tools:layout="@layout/fragment_inbox"
 		  />
 </navigation>

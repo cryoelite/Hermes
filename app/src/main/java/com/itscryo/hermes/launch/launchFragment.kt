@@ -46,9 +46,9 @@ class launchFragment : Fragment() {
 	companion object {
 		fun newInstance() = launchFragment()
 	}
-
+//TODO REVERT boolean check
 	private fun navigate() {
-		if (viewModel.isLoggedIn)
+		if (!viewModel.isLoggedIn)
 			this.findNavController()
 				.navigate(R.id.action_launchFragment_to_inboxFragment)
 		else

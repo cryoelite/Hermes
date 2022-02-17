@@ -7,59 +7,60 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.itscryo.hermes.R
 import com.itscryo.hermes.databinding.FragmentAuthBinding
+import com.itscryo.hermes.domain.IAuthRepository
+import com.itscryo.hermes.domain.ILocalRepository
 import com.itscryo.hermes.model.AuthUserData
-import com.itscryo.hermes.service.FirebaseAuthRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
+import com.itscryo.hermes.model.UserData
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import javax.inject.Inject
 
-
-class AuthFragment : Fragment(), CoroutineScope by MainScope() {
+@AndroidEntryPoint
+class AuthFragment : Fragment() {
 	private lateinit var binding: FragmentAuthBinding
 	private lateinit var viewModel: AuthViewModel
 	private lateinit var viewModelFactory: AuthViewModelFactory
+	@Inject
+	lateinit var authRepo: IAuthRepository
+	@Inject
+	lateinit var localRepo: ILocalRepository
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		binding= FragmentAuthBinding.inflate(inflater)
-		viewModelFactory= AuthViewModelFactory()
-		viewModel= ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
+		binding = FragmentAuthBinding.inflate(inflater)
+		viewModelFactory = AuthViewModelFactory()
+		viewModel = ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
 		binding.submitButton.setOnClickListener(::submitButtonHandler)
 		return binding.root;
 	}
 
-	companion object {
-		fun newInstance() = AuthFragment()
-	}
 
 	private fun submitButtonHandler(view: View) {
-//		val email= binding.editEmail.text.toString()
-//		val pass= binding.editPassword.text.toString()
-		val email="fizzyfuse31@gmail.com"
-		val pass= "Poppu"
-		val authUser= AuthUserData(email, pass)
-		val authLib= FirebaseAuthRepository.create()
+		val email = binding.editEmail.text.toString()
+		val pass = binding.editPassword.text.toString()
+		val authUser = AuthUserData(email, pass)
 		lifecycleScope.launch {
 			try {
-				val result = authLib.signInAsync(authUser).await()
-			}
-			catch(e: Exception)
-			{
-				binding.errorBox.text=e.message
-
-				println("Reason is ${e.message}")
+				val result = authRepo.signInAsync(authUser).await()
+				localRepo.storeUserCred(UserData(result.userID)).await()
+				navigateToInbox()
+			} catch (e: Exception) {
+				binding.errorBox.text = e.message
+				binding.editPassword.text.clear()
 			}
 		}
 	}
 
+	private fun navigateToInbox(){
+		this.findNavController()
+			.navigate(R.id.action_authFragment_to_inboxFragment)
+	}
 	override fun onDestroy() {
 		super.onDestroy()
-		cancel()
 	}
 }
