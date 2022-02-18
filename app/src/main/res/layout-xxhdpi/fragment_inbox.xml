@@ -5,9 +5,13 @@
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		  android:layout_width="match_parent"
-		  android:layout_height="match_parent">
+		  android:layout_height="match_parent"
+		  android:tag="@string/app_name"
+		  >
+
+
+		<include layout="@layout/inbox_toolbar" />
+
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </layout>

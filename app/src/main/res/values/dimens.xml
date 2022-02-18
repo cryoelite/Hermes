@@ -9,6 +9,9 @@
     <dimen name="sso_text_box">150dp</dimen>
     <dimen name="sso_text_size">14dp</dimen>
 
+    <dimen name="bar_height">80dp</dimen>
+
+
 
 
 

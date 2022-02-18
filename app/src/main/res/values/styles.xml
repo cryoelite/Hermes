@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
 	<style name="HeadingStyle">
 		<!-- Customize your theme here. -->
 		<item name="android:textColor">@color/light_black</item>
 		<item name="android:fontFamily">@font/poppins_medium</item>
 		<item name="android:textSize">@dimen/text_heading</item>
 	</style>
-	<style name="AltHeadingStyle" >
+
+	<style name="AltHeadingStyle">
 		<!-- Customize your theme here. -->
 		<item name="android:textColor">@color/black</item>
 		<item name="android:fontFamily">@font/poppins</item>
 		<item name="android:textSize">@dimen/text_heading</item>
 	</style>
-	<style name="MainBody" >
+
+	<style name="MainBody">
 		<!-- Customize your theme here. -->
 		<item name="android:textColor">@color/black</item>
 		<item name="android:fontFamily">@font/poppins</item>
 		<item name="android:textSize">@dimen/main_body</item>
+	</style>
+
+	<style name="TitleStyle" parent="android:TextAppearance">
+		<item name="android:fontFamily">@font/poppins_light</item>
 	</style>
 </resources>
