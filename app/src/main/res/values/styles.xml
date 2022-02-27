@@ -22,7 +22,29 @@
 		<item name="android:textSize">@dimen/main_body</item>
 	</style>
 
+	<style name="MessagePreviewName">
+		<!-- Customize your theme here. -->
+		<item name="android:textColor">@color/black</item>
+		<item name="android:fontFamily">@font/poppins</item>
+		<item name="android:textSize">@dimen/text_content2</item>
+	</style>
+
+	<style name="MessagePreviewMessage">
+		<!-- Customize your theme here. -->
+		<item name="android:textColor">@color/medium_black</item>
+		<item name="android:fontFamily">@font/poppins</item>
+		<item name="android:textSize">@dimen/text_content2</item>
+	</style>
+
 	<style name="TitleStyle" parent="android:TextAppearance">
 		<item name="android:fontFamily">@font/poppins_light</item>
+		<item name="colorControlNormal">@color/white</item>
+	</style>
+
+	<style name="TimeStyle">
+		<item name="android:fontFamily">@font/poppins</item>
+		<item name="android:textColor">@color/medium_black</item>
+		<item name="android:textSize">@dimen/time_text_size</item>
+
 	</style>
 </resources>

@@ -30,7 +30,9 @@
 	<string name="oct">October</string>
 	<string name="nov">November</string>
 	<string name="dec">December</string>
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="default_name">Unknown</string>
+	<string name="default_time">Just Now</string>
+	<string name="default_message_count">1</string>
+
 
 </resources>

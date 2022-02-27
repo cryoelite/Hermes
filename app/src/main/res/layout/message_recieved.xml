@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<variable
+			  name="message_recieved"
+			  type="com.itscryo.hermes.model.MessageRecieved" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		  android:layout_width="match_parent"
+		  android:layout_height="@dimen/box1_height">
+
+
+		<ImageView
+			  android:id="@+id/user_recieved_profile_pic"
+			  android:layout_width="@dimen/icon1"
+			  android:layout_height="@dimen/icon1"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.028"
+			  app:layout_constraintStart_toStartOf="parent"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:srcCompat="@{message_recieved.image}" />
+
+		<TextView
+			  android:id="@+id/user_recieved_name"
+			  style="@style/MessagePreviewName"
+			  android:layout_width="@dimen/box2_width"
+			  android:layout_height="@dimen/box2_height"
+			  android:layout_marginStart="24dp"
+			  android:text="@{message_recieved.userName}"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.043"
+			  app:layout_constraintStart_toEndOf="@+id/user_recieved_profile_pic"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.23" />
+
+
+		<TextView
+			  android:id="@+id/user_recieved_message_preview"
+			  style="@style/MessagePreviewMessage"
+			  android:layout_width="@dimen/box2_width"
+			  android:layout_height="@dimen/box2_height"
+			  android:text="@{message_recieved.message}"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="@+id/user_recieved_name"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/user_recieved_name"
+			  app:layout_constraintTop_toBottomOf="@+id/user_recieved_name"
+			  app:layout_constraintVertical_bias="0.0" />
+
+		<TextView
+			  android:id="@+id/user_recieved_message_time"
+			  style="@style/TimeStyle"
+			  android:layout_width="@dimen/box3_width"
+			  android:layout_height="@dimen/box2_height"
+			  android:text="@{message_recieved.time.toString()}"
+			  android:textAlignment="center"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toEndOf="@+id/user_recieved_name"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:layout_constraintVertical_bias="0.307" />
+
+		<ImageView
+			  android:id="@+id/imageViewnotif"
+			  android:layout_width="@dimen/icon2"
+			  android:layout_height="@dimen/icon2"
+			  app:layout_constraintBottom_toBottomOf="parent"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintHorizontal_bias="0.455"
+			  app:layout_constraintStart_toEndOf="@+id/user_recieved_message_preview"
+			  app:layout_constraintTop_toBottomOf="@+id/user_recieved_message_time"
+			  app:layout_constraintVertical_bias="0.083"
+			  app:srcCompat="@drawable/notif_icon">
+
+		</ImageView>
+
+		<TextView
+			  android:id="@+id/notif_count"
+			  style="@style/MainBody"
+			  android:layout_width="@dimen/icon2"
+			  android:layout_height="@dimen/icon2"
+			  android:paddingTop="@dimen/paddingNotif"
+			  android:text="@{message_recieved.totalMessageRecieved}"
+			  android:textAlignment="center"
+			  android:textColor="@color/white"
+			  app:layout_constraintBottom_toBottomOf="@+id/imageViewnotif"
+			  app:layout_constraintEnd_toEndOf="@+id/imageViewnotif"
+			  app:layout_constraintHorizontal_bias="0.0"
+			  app:layout_constraintStart_toStartOf="@+id/imageViewnotif"
+			  app:layout_constraintTop_toTopOf="@+id/imageViewnotif"
+			  app:layout_constraintVertical_bias="1.0" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
