@@ -1,12 +1,9 @@
-package com.itscryo.hermes.inbox
+package com.itscryo.hermes.app.inbox.item_recycler_view
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.itscryo.hermes.model.Message
-import com.itscryo.hermes.model.MessageRecieved
-import com.itscryo.hermes.model.MessageSent
-import com.itscryo.hermes.model.MessageType
+import com.itscryo.hermes.app.inbox.model.*
 
 class InboxRVAdapter : ListAdapter<Message, RecyclerView.ViewHolder>(InboxItemDiffer()) {
 	override fun onCreateViewHolder(

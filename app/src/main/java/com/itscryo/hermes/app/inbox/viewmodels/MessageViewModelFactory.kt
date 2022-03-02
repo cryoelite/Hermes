@@ -1,4 +1,4 @@
-package com.itscryo.hermes.inbox.viewmodels
+package com.itscryo.hermes.app.inbox.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

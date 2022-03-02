@@ -1,10 +1,10 @@
-package com.itscryo.hermes.inbox
+package com.itscryo.hermes.app.inbox.item_recycler_view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.itscryo.hermes.databinding.MessageSentBinding
-import com.itscryo.hermes.model.MessageSent
+import com.itscryo.hermes.app.inbox.model.MessageSent
 
 class InboxMessageSentViewHolder(val binding: MessageSentBinding) :
 	RecyclerView.ViewHolder(binding.root) {

@@ -1,4 +1,4 @@
-package com.itscryo.hermes.auth
+package com.itscryo.hermes.app.auth.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

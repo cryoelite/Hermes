@@ -1,4 +1,4 @@
-package com.itscryo.hermes.launch
+package com.itscryo.hermes.app.launch
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.itscryo.hermes.R
+import com.itscryo.hermes.app.launch.viewmodels.launchViewModel
+import com.itscryo.hermes.app.launch.viewmodels.launchViewModelFactory
 import com.itscryo.hermes.databinding.FragmentLaunchBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

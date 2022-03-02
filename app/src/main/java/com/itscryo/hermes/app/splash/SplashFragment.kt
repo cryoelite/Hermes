@@ -1,4 +1,4 @@
-package com.itscryo.hermes.splash
+package com.itscryo.hermes.app.splash
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

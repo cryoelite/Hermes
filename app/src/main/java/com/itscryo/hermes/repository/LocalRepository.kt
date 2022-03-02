@@ -1,8 +1,7 @@
 package com.itscryo.hermes.repository
 
-import com.itscryo.hermes.model.UserData
+import com.itscryo.hermes.global_model.UserData
 
-import com.itscryo.hermes.domain.IAuthRepository
 import com.itscryo.hermes.domain.ILocalRepository
 import dagger.Binds
 import dagger.Module

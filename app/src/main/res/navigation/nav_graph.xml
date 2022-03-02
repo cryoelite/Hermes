@@ -7,7 +7,7 @@
 
 	<fragment
 		  android:id="@+id/splashFragment"
-		  android:name="com.itscryo.hermes.splash.SplashFragment"
+		  android:name="com.itscryo.hermes.app.splash.SplashFragment"
 		  android:label="fragment_splash"
 		  tools:layout="@layout/fragment_splash" >
 		<action
@@ -16,7 +16,7 @@
 	</fragment>
 	<fragment
 		  android:id="@+id/launchFragment"
-		  android:name="com.itscryo.hermes.launch.launchFragment"
+		  android:name="com.itscryo.hermes.app.launch.launchFragment"
 		  android:label="fragment_launch"
 		  tools:layout="@layout/fragment_launch" >
 		<action
@@ -28,7 +28,7 @@
 	</fragment>
 	<fragment
 		  android:id="@+id/authFragment"
-		  android:name="com.itscryo.hermes.auth.AuthFragment"
+		  android:name="com.itscryo.hermes.app.auth.AuthFragment"
 		  android:label="fragment_auth"
 		  tools:layout="@layout/fragment_auth" >
 		<action
@@ -37,7 +37,7 @@
 	</fragment>
 	<fragment
 		  android:id="@+id/inboxFragment"
-		  android:name="com.itscryo.hermes.inbox.InboxFragment"
+		  android:name="com.itscryo.hermes.app.inbox.InboxFragment"
 		  android:label="InboxFragment"
 		  tools:layout="@layout/fragment_inbox"
 		  />

@@ -1,7 +1,7 @@
-package com.itscryo.hermes.inbox
+package com.itscryo.hermes.app.inbox.item_recycler_view
 
 import androidx.recyclerview.widget.DiffUtil
-import com.itscryo.hermes.model.Message
+import com.itscryo.hermes.app.inbox.model.Message
 
 class InboxItemDiffer : DiffUtil.ItemCallback<Message>() {
 	override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {

@@ -1,4 +1,4 @@
-package com.itscryo.hermes.launch
+package com.itscryo.hermes.app.launch.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

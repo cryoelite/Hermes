@@ -1,15 +1,13 @@
-package com.itscryo.hermes.auth
+package com.itscryo.hermes.app.launch.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.itscryo.hermes.launch.launchViewModel
-
 @Suppress("UNCHECKED_CAST")
-class AuthViewModelFactory() : ViewModelProvider.Factory {
+class launchViewModelFactory(val app: Application) : ViewModelProvider.AndroidViewModelFactory(app) {
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
-		if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-			return AuthViewModel() as T
+		if (modelClass.isAssignableFrom(launchViewModel::class.java)) {
+			return launchViewModel(app) as T
 		}
 		throw IllegalArgumentException("Unknown ViewModel class")
 	}

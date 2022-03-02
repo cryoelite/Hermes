@@ -6,7 +6,7 @@
 
 		<variable
 			  name="message_recieved"
-			  type="com.itscryo.hermes.model.MessageRecieved" />
+			  type="com.itscryo.hermes.app.inbox.model.MessageRecieved" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,8 @@
 			  app:layout_constraintHorizontal_bias="0.028"
 			  app:layout_constraintStart_toStartOf="parent"
 			  app:layout_constraintTop_toTopOf="parent"
-			  app:srcCompat="@{message_recieved.image}" />
+			  app:setCustomImage="@{message_recieved.image}"
+			  />
 
 		<TextView
 			  android:id="@+id/user_recieved_name"

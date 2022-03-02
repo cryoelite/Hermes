@@ -17,21 +17,27 @@
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/base_header.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/fragment_auth.xml" value="0.5" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/fragment_inbox.xml" value="0.67" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/fragment_launch.xml" value="0.55078125" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/fragment_splash.xml" value="0.54453125" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-hdpi/message.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/base_header.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/fragment_auth.xml" value="0.25" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/fragment_inbox.xml" value="0.25" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/fragment_launch.xml" value="0.3671875" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/fragment_splash.xml" value="0.3671875" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xhdpi/message.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/activity_main.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/base_header.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/fragment_auth.xml" value="0.33" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/fragment_inbox.xml" value="0.25" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/fragment_launch.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/fragment_splash.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxhdpi/message.xml" value="0.30128205128205127" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/base_header.xml" value="0.23817567567567569" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/fragment_auth.xml" value="0.23190789473684212" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/fragment_inbox.xml" value="0.18" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/fragment_launch.xml" value="0.23190789473684212" />
+        <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/fragment_splash.xml" value="0.23190789473684212" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout-xxxhdpi/message.xml" value="0.23817567567567569" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/millify/Documents/GitHub/Hermes/app/src/main/res/layout/base_header.xml" value="0.5" />

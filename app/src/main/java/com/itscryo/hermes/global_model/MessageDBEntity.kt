@@ -1,4 +1,4 @@
-package com.itscryo.hermes.model
+package com.itscryo.hermes.global_model
 
 import android.graphics.drawable.Icon
 import java.util.*

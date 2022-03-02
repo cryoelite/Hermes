@@ -5,8 +5,8 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.itscryo.hermes.domain.IAuthRepository
-import com.itscryo.hermes.model.AuthUserData
-import com.itscryo.hermes.model.UserData
+import com.itscryo.hermes.global_model.AuthUserData
+import com.itscryo.hermes.global_model.UserData
 import com.itscryo.hermes.service.asDeferredAsync
 import dagger.Binds
 import dagger.Module
