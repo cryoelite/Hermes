@@ -1,0 +1,30 @@
+-- import to SQLite by running: sqlite3.exe db.sqlite3 -init sqlite.sql
+
+PRAGMA journal_mode = MEMORY;
+PRAGMA synchronous = OFF;
+PRAGMA foreign_keys = OFF;
+PRAGMA ignore_check_constraints = OFF;
+PRAGMA auto_vacuum = NONE;
+PRAGMA secure_delete = OFF;
+BEGIN TRANSACTION;
+
+
+CREATE TABLE `user`
+(
+`userID` TEXT NOT NULL ,
+`name`   nTEXT NULL ,
+`iconID` TEXT NOT NULL ,
+`email`  TEXT NOT NULL ,
+PRIMARY KEY (`userID`),
+FOREIGN KEY `FK_55` (`iconID`) REFERENCES `userIcon` (`iconID`)
+);
+
+
+
+CREATE INDEX `user_FK_55` ON `user` (`iconID`);
+
+COMMIT;
+PRAGMA ignore_check_constraints = ON;
+PRAGMA foreign_keys = ON;
+PRAGMA journal_mode = WAL;
+PRAGMA synchronous = NORMAL;
