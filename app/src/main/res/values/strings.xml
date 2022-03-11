@@ -33,6 +33,10 @@
 	<string name="default_name">Unknown</string>
 	<string name="default_time">Just Now</string>
 	<string name="default_message_count">1</string>
+	<string name="default_fcm_channel_name">"Hermes Messaging Notification Channel"</string>
+	<string name="default_fcm_channel_desc">"A notification channel for the Hermes Messaging App"</string>
+	<string name="default_fcm_channel_id">"com.itscryo.Hermes.NotifChannel"</string>
+
 
 
 </resources>

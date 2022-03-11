@@ -11,7 +11,7 @@ enum class MessageType(val index: Int) {
 interface Message {
 	val messageType: MessageType
 	val userName: String
-	val message: String
+	val message: String?
 	val  image: Drawable
 	val time: String
 }

@@ -49,7 +49,7 @@ class AuthFragment : Fragment() {
 		lifecycleScope.launch {
 			try {
 				val result = authRepo.signInAsync(authUser).await()
-				localRepo.storeUserCred(UserData(result.userID)).await()
+				localRepo.storeUserCredAsync(UserData(result.userID)).await()
 				navigateToInbox()
 			} catch (e: Exception) {
 				binding.errorBox.text = e.message

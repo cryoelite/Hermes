@@ -23,7 +23,7 @@
 			  app:layout_constraintHorizontal_bias="0.028"
 			  app:layout_constraintStart_toStartOf="parent"
 			  app:layout_constraintTop_toTopOf="parent"
-			  app:setCustomImage="@{message_recieved.image}"
+			  app:setDrawable="@{message_recieved.image}"
 			  />
 
 		<TextView
@@ -88,7 +88,7 @@
 			  android:layout_width="@dimen/icon2"
 			  android:layout_height="@dimen/icon2"
 			  android:paddingTop="@dimen/paddingNotif"
-			  android:text="@{message_recieved.totalMessageRecieved}"
+			  android:text="0"
 			  android:textAlignment="center"
 			  android:textColor="@color/white"
 			  app:layout_constraintBottom_toBottomOf="@+id/imageViewnotif"
