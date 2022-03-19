@@ -13,10 +13,22 @@ interface MessageDBRepository : IMessageDBRepository {
 	override fun storeUserAsync(user: User, userImage: UserImage)
 
 	@Insert
+	override fun storeUserImage(userImage: UserImage)
+
+
+	@Insert
 	override fun storeMessageAsync(message: Message, messageContent: MessageContent)
 
 	@Insert
 	override fun storeConversation(conversation: Conversation)
+
+	@Insert
+	override fun storeUserAndMessageAsync(
+		user: User,
+		userImage: UserImage,
+		message: Message,
+		messageContent: MessageContent
+	)
 
 	@Query("Select * FROM User WHERE userID= :userID")
 	override fun getUserAsync(userID: Long): Flow<User>

@@ -22,7 +22,7 @@ import androidx.room.*
 	)
 )
 data class Message(
-	@PrimaryKey(autoGenerate = true) var messageID: Long,
+	@PrimaryKey(autoGenerate = false) var messageID: Long,
 	var secondUserID: Long,
 	var contentID: Long,
 	@ColumnInfo(defaultValue = "(datetime('now'))") var timestamp: String,

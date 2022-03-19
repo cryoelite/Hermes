@@ -4,4 +4,4 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class MessageContent(@PrimaryKey(autoGenerate = true) var messageContentID: Long, var messageContent: String?, var mediaLocation: String?)
+data class MessageContent(@PrimaryKey(autoGenerate = true) var messageContentID: Long=0L, var messageContent: String?, var mediaLocation: String?)

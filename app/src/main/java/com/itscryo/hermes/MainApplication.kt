@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class MyApplication : Application() {
+class MainApplication : Application() {
 	@SuppressLint("ObsoleteSdkInt")
 	private fun createNotificationChannel() {
 		// Create the NotificationChannel, but only on API 26+ because

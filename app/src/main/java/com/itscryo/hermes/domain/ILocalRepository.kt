@@ -9,5 +9,5 @@ interface ILocalRepository {
 
 	suspend fun storePrefsAsync(userPrefs: UserPreferences): Deferred<kotlin.Unit>
 
-
+	suspend fun downloadImageAsync(url: String): String?
 }

@@ -9,7 +9,13 @@ import com.itscryo.hermes.global_model.message_db_model.*
 import com.itscryo.hermes.repository.MessageDBRepository
 
 @Database(
-	entities = arrayOf(Message::class, MessageContent::class, User::class, UserImage::class, Conversation::class),
+	entities = arrayOf(
+		Message::class,
+		MessageContent::class,
+		User::class,
+		UserImage::class,
+		Conversation::class
+	),
 	version = 1,
 	exportSchema = false
 )
@@ -31,7 +37,7 @@ abstract class MessageDatabase : RoomDatabase() {
 				  "begin insert or replace into Conversation (secondUserID, contentID, unreadCount) " +
 				  "values(new.secondUserID, " +
 				  "new.contentID, " +
-				  "COALESCE((Select unreadCount from Conversation where secondUserID=new.secondUserID) + 1, (CASE WHEN new.isRead=0 THEN 1 ELSE 0 END )));" +
+				  "COALESCE((Select unreadCount from Conversation where secondUserID=new.secondUserID) +(CASE WHEN new.isRead=0 THEN 1 ELSE 0 END ), (CASE WHEN new.isRead=0 THEN 1 ELSE 0 END )));" +
 				  " END"
 
 		/*private const val createConversationTrigger =

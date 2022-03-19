@@ -22,7 +22,7 @@ import androidx.room.*
 	), tableName = "Conversation"
 )
 data class Conversation(
-	@PrimaryKey(autoGenerate = true) var secondUserID: Long,
+	@PrimaryKey(autoGenerate = true) var secondUserID: Long=0L,
 	var contentID: Long,
 	var unreadCount: Int,
 )
