@@ -20,7 +20,7 @@ class MessageModel(application: Application) : AndroidViewModel(application) {
 
 	private suspend fun getMessageIDs(conversation: List<Conversation>): List<Long> {
 		val list = conversation.map {
-			it.contentID
+			it.messageTextID
 		}
 		return list;
 	}

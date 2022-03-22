@@ -17,7 +17,11 @@ interface MessageDBRepository : IMessageDBRepository {
 
 
 	@Insert
-	override fun storeMessageAsync(message: Message, messageContent: MessageContent)
+	override fun storeMessageAsync(
+		message: Message,
+		messageContent: MessageMedia,
+		messateText: MessageText
+	)
 
 	@Insert
 	override fun storeConversation(conversation: Conversation)
@@ -27,22 +31,26 @@ interface MessageDBRepository : IMessageDBRepository {
 		user: User,
 		userImage: UserImage,
 		message: Message,
-		messageContent: MessageContent
+		messageContent: MessageMedia,
+		messageText: MessageText
 	)
 
 	@Query("Select * FROM User WHERE userID= :userID")
 	override fun getUserAsync(userID: Long): Flow<User>
 
+	@Query("Select * FROM UserImage WHERE imageID= :imageID")
+	override fun getUserImageAsync(imageID: Long): Flow<UserImage>
+
 	@Query("Select * FROM User,UserImage")
 	override fun getUsersWithImagesAsync(): Flow<List<UserWithImage>>
 
-	@Query("Select * FROM Message,MessageContent")
+	@Query("Select * FROM Message,MessageMedia,MessageText")
 	override fun getMessagesWithContentAsync(): Flow<List<MessageWithContent>>
 
 	@Query("Select * FROM Conversation")
 	override fun getConversationsAsync(): Flow<List<Conversation>>
 
-	@Query("Select * FROM Message INNER JOIN MessageContent ON Message.contentID = MessageContent.messageContentID where messageID IN (:ids)")
+	@Query("Select * FROM Message INNER JOIN MessageMedia ON Message.messageMediaID = MessageMedia.mediaID INNER JOIN MessageText ON Message.messageTextID=MessageText.textID  where messageID IN (:ids)")
 	override fun getMessagesFromIDsAsync(ids: List<Long>): Flow<List<MessageWithContent>>
 
 }

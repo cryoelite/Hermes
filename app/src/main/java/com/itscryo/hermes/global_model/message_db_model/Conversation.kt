@@ -3,26 +3,27 @@ package com.itscryo.hermes.global_model.message_db_model
 import androidx.room.*
 
 @Entity(
-	foreignKeys = arrayOf(
-		ForeignKey(
-			entity = User::class,
-			parentColumns = arrayOf("userID"),
-			childColumns = arrayOf("secondUserID"),
-			onDelete = ForeignKey.CASCADE
-		), ForeignKey(
-			entity = MessageContent::class,
-			parentColumns = arrayOf("messageContentID"),
-			childColumns = arrayOf("contentID"),
-			onDelete = ForeignKey.CASCADE
-		)
-	),
-	indices = arrayOf(
-		Index("secondUserID"),
-		Index("contentID")
-	), tableName = "Conversation"
+	foreignKeys = [ForeignKey(
+		entity = User::class,
+		parentColumns = arrayOf("userID"),
+		childColumns = arrayOf("secondUserID"),
+		onDelete = ForeignKey.CASCADE
+	), ForeignKey(
+		entity = MessageMedia::class,
+		parentColumns = arrayOf("mediaID"),
+		childColumns = arrayOf("messageMediaID"),
+		onDelete = ForeignKey.CASCADE
+	), ForeignKey(
+		entity = MessageText::class,
+		parentColumns = arrayOf("textID"),
+		childColumns = arrayOf("messageTextID"),
+		onDelete = ForeignKey.CASCADE
+	)],
+	indices = [Index("secondUserID"), Index("messageMediaID"), Index("messageTextID")], tableName = "Conversation"
 )
 data class Conversation(
-	@PrimaryKey(autoGenerate = true) var secondUserID: Long=0L,
-	var contentID: Long,
+	@PrimaryKey(autoGenerate = false) var secondUserID: String,
+	var messageMediaID: Long,
+	var messageTextID: Long,
 	var unreadCount: Int,
 )

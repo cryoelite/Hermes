@@ -1,4 +1,3 @@
 package com.itscryo.hermes.global_model
 
-class UserPreferences {
-}
+data class UserPreferences(val appTheme: String, val appLanguage: String)

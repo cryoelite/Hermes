@@ -11,7 +11,8 @@ import com.itscryo.hermes.repository.MessageDBRepository
 @Database(
 	entities = arrayOf(
 		Message::class,
-		MessageContent::class,
+		MessageMedia::class,
+		MessageText::class,
 		User::class,
 		UserImage::class,
 		Conversation::class
@@ -26,30 +27,17 @@ abstract class MessageDatabase : RoomDatabase() {
 	companion object {
 		@Volatile
 		private var INSTANCE: MessageDatabase? = null
-/*
-		private const val updateConversationTrigger =
-			"create trigger new_message_trigger after insert on Message " +
-				  "begin update Conversation set unreadCount= unreadCount + 1, contentID= new.contentID where secondUserID=new.secondUserID; END"
-*/
 
 		private const val upsertConversationTrigger =
 			"create trigger upsert_conversation after insert on Message " +
-				  "begin insert or replace into Conversation (secondUserID, contentID, unreadCount) " +
+				  "begin insert or replace into Conversation (secondUserID, messageMediaID, messageTextID, unreadCount) " +
 				  "values(new.secondUserID, " +
-				  "new.contentID, " +
+				  "new.messageMediaID, " +
+				  "new.messageTextID, " +
 				  "COALESCE((Select unreadCount from Conversation where secondUserID=new.secondUserID) +(CASE WHEN new.isRead=0 THEN 1 ELSE 0 END ), (CASE WHEN new.isRead=0 THEN 1 ELSE 0 END )));" +
 				  " END"
 
-		/*private const val createConversationTrigger =
-			"create trigger new_user_trigger after insert on User " +
-				  "begin insert into Conversation(secondUserID, contentID, unreadCount) values (new.userID, null, 0); END"
-*/
 		fun initScripts(db: SupportSQLiteDatabase) {
-
-/*
-			db.execSQL(updateConversationTrigger)
-			db.execSQL(createConversationTrigger)
-*/
 			db.execSQL(upsertConversationTrigger)
 		}
 

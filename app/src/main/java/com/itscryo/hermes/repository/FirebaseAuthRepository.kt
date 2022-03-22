@@ -5,8 +5,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.itscryo.hermes.domain.IAuthRepository
-import com.itscryo.hermes.global_model.AuthUserData
-import com.itscryo.hermes.global_model.UserData
 import com.itscryo.hermes.service.asDeferredAsync
 import dagger.Binds
 import dagger.Module
@@ -30,22 +28,22 @@ abstract class FirebaseAuthModule {
 class FirebaseAuthRepository @Inject constructor() : IAuthRepository {
 	private val firebaseAuth: FirebaseAuth = Firebase.auth
 
-	override suspend fun signInAsync(user: AuthUserData): Deferred<UserData> {
-		val deferred = CompletableDeferred<UserData>()
+	override suspend fun signInAsync(email: String, pass: String): Deferred<String> {
+		val deferred = CompletableDeferred<String>()
 
 		try {
 			val result =
-				firebaseAuth.signInWithEmailAndPassword(user.email, user.pass)
+				firebaseAuth.signInWithEmailAndPassword(email, pass)
 					.asDeferredAsync().await()
 			if (result.user == null) {
 				deferred.completeExceptionally(Exception("Unknown error in server"))
 			} else {
-				deferred.complete(UserData(result.user!!.uid))
+				deferred.complete(result.user!!.uid)
 			}
 		} catch (e: FirebaseAuthInvalidCredentialsException) {
 			deferred.completeExceptionally(Exception("Invalid Password"))
 		} catch (e: FirebaseAuthInvalidUserException) {
-			return signUpAsync(user)
+			return signUpAsync(email,pass)
 		} catch (e: FirebaseAuthException) {
 			deferred.completeExceptionally(
 				Exception(
@@ -63,17 +61,17 @@ class FirebaseAuthRepository @Inject constructor() : IAuthRepository {
 
 	}
 
-	override suspend fun signUpAsync(user: AuthUserData): Deferred<UserData> {
-		val deferred = CompletableDeferred<UserData>()
+	override suspend fun signUpAsync(email: String, pass: String): Deferred<String> {
+		val deferred = CompletableDeferred<String>()
 
 		try {
 			val result =
-				firebaseAuth.createUserWithEmailAndPassword(user.email, user.pass)
+				firebaseAuth.createUserWithEmailAndPassword(email, pass)
 					.asDeferredAsync().await()
 			if (result.user == null) {
 				deferred.completeExceptionally(Exception("Unknown error in server"))
 			} else {
-				deferred.complete(UserData(result.user!!.uid))
+				deferred.complete(result.user!!.uid)
 			}
 		} catch (e: FirebaseAuthWeakPasswordException) {
 			deferred.completeExceptionally(Exception(e.message))

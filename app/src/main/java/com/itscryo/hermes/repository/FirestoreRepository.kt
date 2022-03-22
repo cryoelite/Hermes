@@ -26,6 +26,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.runBlocking
+import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
 import com.itscryo.hermes.global_model.firestore_incoming_model.UserWithImage as UserImageFirestore
@@ -45,7 +46,7 @@ class FirestoreRepository @Inject constructor() :
 	private val database = Firebase.firestore
 
 	@Inject
-	lateinit var cloudStorage: ICloudStorage
+	lateinit var cloudStorageFactory: CloudStorageFactory
 
 	@Inject
 	lateinit var localStorage: ILocalRepository
@@ -82,7 +83,7 @@ class FirestoreRepository @Inject constructor() :
 		val deviceID = getDeviceIDAsync().await()
 		val user = userWithImage.user
 		val name = user.name ?: ""
-		val imageURL = storeImageAndGetURL(userWithImage.image)
+		val imageURL = storeImageAndGetURL(userWithImage.image, user.userID)
 		return mapOf<String, Any>(
 			firestoreFields.deviceID to deviceID,
 			firestoreFields.isOnline to true,
@@ -93,61 +94,80 @@ class FirestoreRepository @Inject constructor() :
 		)
 	}
 
-	private suspend fun storeImageAndGetURL(image: UserImage): String {
+	private suspend fun storeImageAndGetURL(image: UserImage, userID: String): String {
 
-		return cloudStorage.storeProfileImageAndGetURL(image.imageLocation)
+		return cloudStorageFactory.createCloudStorageService(userID).storeProfileImageAndGetURL(image)
 	}
 
 
-	override suspend fun getUserInfo(userID: Long): UserImageFirestore {
-		val data =
-			database.collection(firestoreCollections.users).document(userID.toString())
-				.get().result
-		var name: String? = data[firestoreFields.name].toString()
-		if (name == null || name.isEmpty())
-			name = null
-		val profileImageURL = data[firestoreFields.profileImageURL].toString()
-		val email = data[firestoreFields.email].toString()
-		return UserImageFirestore(
-			userID, profileImageURL, email, name
-		)
+	override suspend fun getUserInfo(userID: String): UserImageFirestore? {
+		try {
+			val data =
+				database.collection(firestoreCollections.users)
+					.document(userID)
+					.get().result
+			var name: String? = data[firestoreFields.name].toString()
+			if (name == null || name.isEmpty())
+				name = null
+			val profileImageURL = data[firestoreFields.profileImageURL].toString()
+			val profileImageFileName =
+				data[firestoreFields.profileImageFileName].toString()
 
-
-	}
-
-/*	private suspend fun getImageLocationForUser(url: String): String {
-		var imageLocation = localStorage.downloadImageAsync(url)
-		if (imageLocation == null) {
-			imageLocation = localStorage.downloadImageAsync(url)
-			if (imageLocation == null) {
-				Log.e(tag.error, "Failed to download image even after 2 tries")
-				throw Throwable("Failed to download image even after 2 tries")
-			}
+			val email = data[firestoreFields.email].toString()
+			return UserImageFirestore(
+				userID, profileImageURL,profileImageFileName, email, name
+			)
+		} catch (e: Exception) {
+			return null
 		}
-
-		return imageLocation
-	}*/
-
-	override suspend fun sendMessage(recipientID: Long, userID: Long,message: MessageWithContent) {
-		val id="$userID+${GregorianCalendar.getInstance().timeInMillis}"
-		database.collection(firestoreCollections.messages).document(firestoreDocuments.messageData).collection(recipientID.toString()).document(id).set(
-
-		)
 	}
 
-	private fun MessageWithContent.toFirestoreMessage(userID: Long): MessageWithMedia{
-		val message= MessageWithMedia(
-			this.content.mediaLocation ?:"",
-			textContent = this.message.
 
+
+	override suspend fun sendMessage(
+		recipientID: String,
+		userID: String,
+		message: MessageWithContent
+	) {
+		val id = "$userID+${GregorianCalendar.getInstance().timeInMillis}"
+		val data= generateMessage(userID, message)
+		database.collection(firestoreCollections.messages)
+			.document(firestoreDocuments.messageData).collection(recipientID.toString())
+			.document(id).set(data)
+	}
+
+	private suspend fun generateMessage(userID: String, message: MessageWithContent): Map<String,Any> {
+		val messageData= message.message
+		val media= message.content
+		var mediaURL: String=""
+		var mediaFileName: String= ""
+		var messageText: String= ""
+		if(media.mediaFileName !=null && media.mediaLocalPath !=null) {
+			val mediaContentURL= cloudStorageFactory.createCloudStorageService(userID).storeMediaAndGetURL(media)
+			mediaURL=mediaContentURL
+			mediaFileName= media.mediaFileName as String
+		}
+		if(message.text.text!=null){
+			messageText=message.text.text as String
+		}
+		val messageDate= messageData.timestamp?: throw Throwable("Invalid date")
+		val date= DateFormat.getInstance().parse(messageDate) ?: throw Throwable("Couldn't parse date")
+		return mapOf(
+			firestoreFields.isRead to false,
+			firestoreFields.isRecieved to false,
+			firestoreFields.mediaContentURL to mediaURL,
+			firestoreFields.mediaFileName to mediaFileName ,
+			firestoreFields.senderID to userID,
+			firestoreFields.sentTime to Timestamp(date),
+			firestoreFields.textContent to messageText
 		)
 
 	}
 
-	override suspend fun recieveMessages(userID: Long): ReceiveChannel<List<MessageWithMedia>> {
+	override suspend fun recieveMessages(userID: String): ReceiveChannel<List<MessageWithMedia>> {
 		val channel = Channel<List<MessageWithMedia>>()
 		val data = database.collection(firestoreCollections.messages)
-			.document(firestoreDocuments.messageData).collection(userID.toString())
+			.document(firestoreDocuments.messageData).collection(userID)
 		data.addSnapshotListener { snapshot, e ->
 			if (e != null) {
 				Log.e(tag.error, "Document retrieval failed")
@@ -156,27 +176,61 @@ class FirestoreRepository @Inject constructor() :
 
 			val list = mutableListOf<MessageWithMedia>()
 			for (elem in snapshot!!) {
-				val mediaContent = elem[firestoreFields.mediaContent].toString()
-				val textContent = elem[firestoreFields.textContent].toString()
-				val senderIDLong = when(val tempID=elem[firestoreFields.senderID]){
-					is Long -> tempID
-					else -> tempID.toString().toLong()
+				val tempURL = elem[firestoreFields.mediaContentURL]
+				var mediaURL: String?= null
+				if(tempURL!=null && tempURL != "")
+				{
+					mediaURL= tempURL as String
 				}
+				val tempText= elem[firestoreFields.textContent]
+				var textContent: String? = null
+				if(tempText!=null && tempText != "")
+				{
+					textContent= tempText as String
+				}
+				val isRecieved = elem[firestoreFields.isRecieved].toString()
+					.toBooleanStrict()
+				val isRead =
+					elem[firestoreFields.isRead].toString().toBooleanStrict()
+				val sentTime =
+					when (val tempTime = elem[firestoreFields.sentTime]) {
+						is Timestamp -> tempTime.toDate()
+						else -> {
+							Log.e(
+								tag.error,
+								"Invalid sent message time"
+							)
+							continue
+						}
+					}
+				val senderIDLong =elem[firestoreFields.senderID].toString()
 
-
+				var mediaFileName: String? = null
+				val tempFileName=  elem[firestoreFields.mediaFileName]
+				if(tempFileName!=null && tempFileName != "")
+				{
+					mediaFileName= tempFileName as String
+				}
 				val message = MessageWithMedia(
-					mediaContentLocation = mediaContent,
-					textContent,
-					senderIDLong
+					mediaURL = mediaURL,
+					textContent = textContent,
+					senderID = senderIDLong,
+					sentTime = sentTime,
+					isRead = isRead,
+					isRecieved = isRecieved,
+					mediaFileName= mediaFileName
 				)
 				list.add(message)
 			}
+			Log.i(tag.info, "Message List Processed")
 			runBlocking {
+				Log.i(tag.info, "Sending message list to channel")
+
 				channel.send(list)
 			}
 
 		}
-		return  channel
+		return channel
 	}
 
 }

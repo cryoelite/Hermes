@@ -4,16 +4,16 @@ import com.itscryo.hermes.global_model.firestore_incoming_model.MessageWithMedia
 import com.itscryo.hermes.global_model.message_db_model.MessageWithContent
 import com.itscryo.hermes.global_model.message_db_model.UserWithImage
 import kotlinx.coroutines.channels.ReceiveChannel
-import com.itscryo.hermes.global_model.firestore_incoming_model.UserWithImage as UserImageFirestore
+import com.itscryo.hermes.global_model.firestore_incoming_model.UserWithImage as FirestoreUserImage
 
 interface IFirestoreRepository {
 
 	suspend fun storeUserInfo(user: UserWithImage)
 
-	suspend fun getUserInfo(userID: Long): UserImageFirestore
+	suspend fun getUserInfo(userID: String): FirestoreUserImage?
 
-	suspend fun sendMessage(recipientID: Long, userID: Long,message: MessageWithContent)
+	suspend fun sendMessage(recipientID: String, userID: String,message: MessageWithContent)
 
-	suspend fun recieveMessages(userID: Long): ReceiveChannel<List<MessageWithMedia>>
+	suspend fun recieveMessages(userID: String): ReceiveChannel<List<MessageWithMedia>>
 
 }

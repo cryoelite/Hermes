@@ -1,13 +1,24 @@
 package com.itscryo.hermes.domain
 
-import com.itscryo.hermes.global_model.UserData
+import android.graphics.Bitmap
 import com.itscryo.hermes.global_model.UserPreferences
 import kotlinx.coroutines.Deferred
 
 interface ILocalRepository {
-	suspend fun storeUserCredAsync(userData: UserData): Deferred<kotlin.Unit>
+	suspend fun storeUserCredAsync(userID: String)
 
-	suspend fun storePrefsAsync(userPrefs: UserPreferences): Deferred<kotlin.Unit>
+	suspend fun retrieveUserCredAsync(): String?
 
-	suspend fun downloadImageAsync(url: String): String?
+	suspend fun storePrefsAsync(userPrefs: UserPreferences)
+
+	suspend fun retrievePrefsAsync(): UserPreferences?
+
+	suspend fun storeImageFromURLAsync(url: String): String
+
+	suspend fun retrieveImageAsync(imageLocation: String): ByteArray?
+
+	suspend fun storeMediaFromURL(url: String): String
+
+	suspend fun retrieveMediaFromLocationAsync(mediaLocation: String): Bitmap?
+
 }

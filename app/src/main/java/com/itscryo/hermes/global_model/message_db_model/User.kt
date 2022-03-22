@@ -6,20 +6,16 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-	foreignKeys = arrayOf(
-		ForeignKey(
-			entity = UserImage::class,
-			parentColumns = arrayOf("imageID"),
-			childColumns = arrayOf("userImageID"),
-			onDelete = ForeignKey.CASCADE
-		)
-	),
-	indices = arrayOf(
-		Index("userImageID"),
-	)
+	foreignKeys = [ForeignKey(
+		entity = UserImage::class,
+		parentColumns = arrayOf("imageID"),
+		childColumns = arrayOf("userImageID"),
+		onDelete = ForeignKey.CASCADE
+	)],
+	indices = [Index("userImageID")]
 )
 data class User(
-	@PrimaryKey(autoGenerate = false) var userID: Long,
+	@PrimaryKey(autoGenerate = false) var userID: String,
 	var name: String?,
 	var userImageID: Long,
 	var email: String

@@ -6,20 +6,29 @@ import kotlinx.coroutines.flow.Flow
 interface IMessageDBRepository {
 	fun storeUserAsync(user: User, userImage: UserImage)
 
-	fun storeMessageAsync(message: Message, messageContent: MessageContent)
+	fun storeMessageAsync(
+		message: Message,
+		messageContent: MessageMedia,
+		messateText: MessageText
+	)
 
 	fun storeUserAndMessageAsync(
 		user: User,
 		userImage: UserImage,
 		message: Message,
-		messageContent: MessageContent
+		messageContent: MessageMedia,
+		messageText: MessageText
 	)
+
 
 	fun storeUserImage(userImage: UserImage)
 
 	fun storeConversation(conversation: Conversation)
 
 	fun getUserAsync(userID: Long): Flow<User>
+
+	fun getUserImageAsync(imageID: Long): Flow<UserImage>
+
 
 	fun getUsersWithImagesAsync(): Flow<List<UserWithImage>>
 
@@ -29,5 +38,5 @@ interface IMessageDBRepository {
 
 	fun getMessagesFromIDsAsync(ids: List<Long>): Flow<List<MessageWithContent>>
 
-
+//TODO: Check behavior when a user is requested but it doesn't exist in db
 }

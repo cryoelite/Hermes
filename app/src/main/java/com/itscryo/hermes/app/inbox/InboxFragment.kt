@@ -11,12 +11,20 @@ import com.itscryo.hermes.app.inbox.item_recycler_view.InboxRVAdapter
 import com.itscryo.hermes.app.inbox.viewmodels.MessageModel
 import com.itscryo.hermes.app.inbox.viewmodels.MessageViewModelFactory
 import com.itscryo.hermes.databinding.FragmentInboxBinding
+import com.itscryo.hermes.domain.IFirestoreRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class InboxFragment : Fragment() {
 	private lateinit var binding: FragmentInboxBinding
 	private lateinit var viewModel: MessageModel;
 	private lateinit var viewModelFactory: MessageViewModelFactory
+
+	@Inject
+	lateinit var firestoreService: IFirestoreRepository
+
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
