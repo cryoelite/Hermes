@@ -5,18 +5,49 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.itscryo.hermes.domain.IMessageDBRepository
 import com.itscryo.hermes.global_model.message_db_model.*
 import com.itscryo.hermes.repository.MessageDBRepository
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+
+@Module()
+@InstallIn(SingletonComponent::class)
+class DatabaseModule {
+
+
+	@Singleton
+	@Provides
+	fun provideDAO(messageDatabase: MessageDatabase): MessageDBRepository {
+		return messageDatabase.messageDBRepository
+	}
+
+	@Singleton
+	@Provides
+	fun provideDB(@ApplicationContext context: Context): MessageDatabase {
+		return MessageDatabase.getInstance(context)
+
+	}
+}
+
+@Module(includes = [DatabaseModule::class])
+@InstallIn(SingletonComponent::class)
+abstract class DBImpl{
+
+	@Singleton
+	@Binds
+	abstract fun messageBinder(messageDBRepo: MessageDBRepository): IMessageDBRepository
+}
+
 
 @Database(
-	entities = arrayOf(
-		Message::class,
-		MessageMedia::class,
-		MessageText::class,
-		User::class,
-		UserImage::class,
-		Conversation::class
-	),
+	entities = [Message::class, MessageMedia::class, MessageText::class, User::class, UserImage::class, Conversation::class],
 	version = 1,
 	exportSchema = false
 )

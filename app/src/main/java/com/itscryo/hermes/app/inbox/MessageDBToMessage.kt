@@ -6,6 +6,7 @@ import com.itscryo.hermes.app.inbox.model.MessageRecieved
 import com.itscryo.hermes.app.inbox.model.MessageSent
 import com.itscryo.hermes.app.inbox.model.UserMessageStatus
 import com.itscryo.hermes.app.inbox.model.UserMessageStatusEnum
+import com.itscryo.hermes.domain.IMessageDBRepository
 import com.itscryo.hermes.global_model.message_db_model.MessageWithContent
 import com.itscryo.hermes.global_model.message_db_model.UserWithImage
 import com.itscryo.hermes.service.MessageDatabase
@@ -15,14 +16,14 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import com.itscryo.hermes.app.inbox.model.Message as InboxMessage
 
-class MessageDBToMessage(val database: MessageDatabase, val context: Context) {
+class MessageDBToMessage(val database: IMessageDBRepository, val context: Context) {
 
 	private suspend fun getUsers(): List<UserWithImage> {
-		return database.messageDBRepository.getUsersWithImagesAsync().first()
+		return database.getUsersWithImagesAsync().first()
 	}
 
 	private suspend fun getMessages(ids: List<Long>): List<MessageWithContent> {
-		return database.messageDBRepository.getMessagesFromIDsAsync(ids).first()
+		return database.getMessagesFromIDsAsync(ids).first()
 	}
 
 	suspend fun getMessagesFromIDs(ids: List<Long>): List<InboxMessage> {

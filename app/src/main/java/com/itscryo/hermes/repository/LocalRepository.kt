@@ -4,72 +4,40 @@ import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.FileUtils
-import android.os.IBinder
 import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.itscryo.hermes.domain.ILocalRepository
 import com.itscryo.hermes.global_model.*
 import com.itscryo.hermes.service.GlobalEncryption
-import com.itscryo.hermes.service.MediaService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class LocalRepoModule {
 
+	@Singleton
 	@Binds
-	abstract fun bindLocalRepo(
-		localImpl: LocalRepository
-	): ILocalRepository
+	abstract fun provideLocalRepo(localRepository: LocalRepository): ILocalRepository
 }
 
 
 class LocalRepository @Inject constructor(@ActivityContext val context: Context) :
 	ILocalRepository {
-	private lateinit var imageManagerBinder: MediaService.LocalBinder
 	private val localFolders = LocalFolders()
 	private val logTags = LogTags("LocalRepo")
 	private val sharedPrefKeys = SharedPrefKeys()
-	private val connection = object : ServiceConnection {
-		override fun onServiceConnected(className: ComponentName, service: IBinder) {
-			// We've bound to LocalService, cast the IBinder and get LocalService instance
-			imageManagerBinder = service as MediaService.LocalBinder
 
-
-		}
-
-		override fun onServiceDisconnected(arg0: ComponentName) {
-
-		}
-
-	}
-
-	private suspend fun <T> withBind(lambda: suspend () -> T): T {
-		bind()
-		val result = lambda()
-		unbind()
-		return result
-	}
-
-	private fun bind() {
-		Intent(context, MediaService::class.java).also { intent ->
-			context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
-		}
-	}
-
-	private fun unbind() {
-		context.unbindService(connection)
-	}
 
 	override suspend fun storeUserCredAsync(userID: String) {
 
@@ -154,12 +122,12 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 				val appLanguage =
 					sharedPrefs.getString(sharedPrefKeys.appTheme, null)
 
-				if (appTheme != null && appLanguage!=null) {
+				if (appTheme != null && appLanguage != null) {
 					Log.i(
 						logTags.info,
 						"Successfully retrieved user preferences from Shared Prefs"
 					)
-					return@withContext UserPreferences(appTheme,appLanguage)
+					return@withContext UserPreferences(appTheme, appLanguage)
 				} else {
 					Log.i(
 						logTags.info,
@@ -180,12 +148,9 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 	}
 
 
-	override suspend fun storeImageFromURLAsync(url: String): String {
-		val imagePath = withBind<String?> {
-			val imagePath: String? = withContext<String?>(Dispatchers.IO) {
+	override suspend fun storeImageFromBytesAsync(imageBitmap: Bitmap): String {
+		val imagePath =withContext<String?>(Dispatchers.IO) {
 				try {
-					val image = imageManagerBinder.downloadImage(url)
-						?: return@withContext null
 					val imageFIlename =
 						GlobalEncryption().generateRandomString() + ".jpg"
 					val storageDir = File(localFolders.profilePictureFolder)
@@ -195,7 +160,7 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 					val imageFile = File(storageDir, imageFIlename)
 
 					val fOut = FileOutputStream(imageFile)
-					image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+					imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
 					fOut.close()
 					Log.i(logTags.info, "Image stored successfully")
 					return@withContext imageFile.absolutePath
@@ -204,26 +169,30 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 					Log.e(logTags.error, e.message ?: "Failed to store image")
 					return@withContext null
 				}
-			}
-			return@withBind imagePath
-		} ?: throw Throwable("Failed to store Image and get image path")
+			}?: throw Throwable("Failed to store Image and get image path")
 		return imagePath
 	}
 
 
-	override suspend fun retrieveImageAsync(imageLocation: String): ByteArray? {
-		val image: ByteArray? = withBind<ByteArray?> {
-			return@withBind imageManagerBinder.getImage(imageLocation)
+	override suspend fun retrieveImageAsync(imageLocation: String): Bitmap? {
+		val mediaFile = File(imageLocation)
+		if (!mediaFile.exists())
+			return null
+		try {
+			val image = withContext<Bitmap>(Dispatchers.IO) {
+				return@withContext BitmapFactory.decodeFile(imageLocation)
+			}
+
+			return image
+
+		} catch (e: Exception) {
+			Log.e(logTags.error, "Failed to retrieve image from local directory")
+			return null
 		}
-		return image
 	}
 
-	override suspend fun storeMediaFromURL(url: String): String {
-		val dataTempLocation = withBind<String?> {
-			return@withBind imageManagerBinder.downloadMedia(url)
-		}
-		if (dataTempLocation != null) {
-			val location = File(dataTempLocation)
+	override suspend fun storeMedia(tempLocalPath: String): String {
+			val location = File(tempLocalPath)
 			val destination = File(localFolders.mediaContent)
 			if (!destination.exists()) {
 				destination.mkdirs()
@@ -240,28 +209,10 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 				}
 			}
 			return destination.absolutePath
-		} else {
-			Log.e(logTags.error, "Failed to download media from URL")
-			throw Throwable("Failed to download media from URL")
-		}
+
 	}
 
 
-	override suspend fun retrieveMediaFromLocationAsync(mediaLocation: String): Bitmap? {
-		val mediaFile = File(mediaLocation)
-		if (!mediaFile.exists())
-			return null
-		try {
-			val image = withContext<Bitmap>(Dispatchers.IO) {
-				return@withContext BitmapFactory.decodeFile(mediaLocation)
-			}
-
-			return image
-
-		} catch (e: Exception) {
-			Log.e(logTags.error, "Failed to retrieve media from local directory")
-			return null
-		}
-	}
+	override suspend fun retrieveMediaFromLocationAsync(mediaLocation: String): Bitmap? = retrieveImageAsync(mediaLocation)
 
 }

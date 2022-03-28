@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
 
 @BindingAdapter("setCustomImage")
 fun ImageView.setCustomImage(imageID: Int) {
@@ -15,3 +16,6 @@ fun ImageView.setCustomImage(imageID: Int) {
 fun ImageView.setDrawable(image: Drawable) {
 	setImageDrawable(image)
 }
+
+
+

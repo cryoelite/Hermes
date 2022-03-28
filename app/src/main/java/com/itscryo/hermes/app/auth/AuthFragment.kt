@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.itscryo.hermes.R
-import com.itscryo.hermes.app.auth.viewmodel.AuthViewModel
-import com.itscryo.hermes.app.auth.viewmodel.AuthViewModelFactory
+import com.itscryo.hermes.app.auth.viewmodels.AuthViewModel
+import com.itscryo.hermes.app.auth.viewmodels.AuthViewModelFactory
 import com.itscryo.hermes.databinding.FragmentAuthBinding
 import com.itscryo.hermes.domain.IAuthRepository
 import com.itscryo.hermes.domain.ILocalRepository

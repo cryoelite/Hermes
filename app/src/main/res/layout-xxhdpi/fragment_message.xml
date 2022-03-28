@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto"
+	  xmlns:tools="http://schemas.android.com/tools"
+	  tools:context=".app.message.MessageFragment">
+
+	<data>
+
+		<variable
+			  name="userData"
+			  type="com.itscryo.hermes.app.message.viewmodels.MessageViewModel" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  android:tag="@string/app_name">
+
+		<androidx.appcompat.widget.Toolbar
+			  android:id="@+id/messageToolbar"
+			  android:layout_width="0dp"
+			  android:layout_height="@dimen/bar_height"
+			  android:background="@color/hot_pink"
+			  android:minHeight="?attr/actionBarSize"
+			  android:tag="@string/app_name"
+			  android:theme="@style/TitleStyle"
+			  app:buttonGravity="center_vertical"
+			  app:layout_constraintEnd_toEndOf="parent"
+			  app:layout_constraintStart_toStartOf="parent"
+			  app:layout_constraintTop_toTopOf="parent"
+			  app:menu="@menu/message_menu"  >
+
+			<ImageView
+				  android:id="@+id/userIconMessageToolbar"
+				  android:layout_width="@dimen/icon1"
+				  android:layout_height="@dimen/icon1"
+				  android:contentDescription="@string/user_profile_icon_desc"
+				  android:src="@drawable/user_icon" />
+
+			<LinearLayout
+				  android:layout_width="@dimen/box4_width"
+				  android:layout_height="wrap_content"
+				  android:orientation="vertical"
+				  android:paddingStart="@dimen/paddingUsernameMessage"
+				  android:paddingEnd="@dimen/paddingUsernameMessage">
+
+				<TextView
+					  style="@style/UsernameMessage"
+					  android:layout_width="@dimen/box4_width"
+					  android:layout_height="wrap_content"
+					  android:gravity="center_vertical"
+					  android:text="@{userData.userName}"
+					  />
+
+				<TextView
+					  style="@style/UserOnlineStatus"
+					  android:layout_width="@dimen/box4_width"
+					  android:layout_height="wrap_content"
+					  android:text="@{userData.userOnlineStatus}"
+					  android:visibility="visible" />
+
+			</LinearLayout>
+		</androidx.appcompat.widget.Toolbar>
+
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

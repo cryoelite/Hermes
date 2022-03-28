@@ -21,5 +21,9 @@
     <dimen name="box4_width">220dp</dimen>
     <dimen name="time_text_size">10sp</dimen>
     <dimen name="paddingNotif">0dp</dimen>
+    <dimen name="paddingUsernameMessage">10dp</dimen>
+    <dimen name="menu_item_size">40dp</dimen>
+    <dimen name="menu_item_padding">2dp</dimen>
+
 
 </resources>

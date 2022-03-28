@@ -40,5 +40,22 @@
 		  android:name="com.itscryo.hermes.app.inbox.InboxFragment"
 		  android:label="InboxFragment"
 		  tools:layout="@layout/fragment_inbox"
-		  />
+		  >
+		<action
+			  android:id="@+id/action_inboxFragment_to_messageFragment"
+			  app:destination="@id/messageFragment" />
+		<action
+			  android:id="@+id/action_inboxFragment_to_settingsFragment"
+			  app:destination="@id/settingsFragment" />
+	</fragment>
+	<fragment
+		  android:id="@+id/messageFragment"
+		  android:name="com.itscryo.hermes.app.message.MessageFragment"
+		  android:label="fragment_message"
+		  tools:layout="@layout/fragment_message" />
+	<fragment
+		  android:id="@+id/settingsFragment"
+		  android:name="com.itscryo.hermes.app.settings.SettingsFragment"
+		  android:label="fragment_settings"
+		  tools:layout="@layout/fragment_settings" />
 </navigation>

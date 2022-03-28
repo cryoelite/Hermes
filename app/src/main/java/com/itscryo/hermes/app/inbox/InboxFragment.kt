@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.itscryo.hermes.R
 import com.itscryo.hermes.app.inbox.item_recycler_view.InboxRVAdapter
-import com.itscryo.hermes.app.inbox.viewmodels.MessageModel
-import com.itscryo.hermes.app.inbox.viewmodels.MessageViewModelFactory
+import com.itscryo.hermes.app.inbox.viewmodels.InboxViewModel
+import com.itscryo.hermes.app.inbox.viewmodels.InboxViewModelFactory
 import com.itscryo.hermes.databinding.FragmentInboxBinding
 import com.itscryo.hermes.domain.IFirestoreRepository
+import com.itscryo.hermes.repository.MessageDBRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,8 +22,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class InboxFragment : Fragment() {
 	private lateinit var binding: FragmentInboxBinding
-	private lateinit var viewModel: MessageModel;
-	private lateinit var viewModelFactory: MessageViewModelFactory
+	private lateinit var viewModel: InboxViewModel;
+	private lateinit var viewModelFactory: InboxViewModelFactory
 
 	@Inject
 	lateinit var firestoreService: IFirestoreRepository
@@ -31,16 +34,16 @@ class InboxFragment : Fragment() {
 	): View {
 		binding = FragmentInboxBinding.inflate(inflater)
 		val adapter = InboxRVAdapter()
-		viewModelFactory = MessageViewModelFactory(requireActivity().application)
+		viewModelFactory = InboxViewModelFactory(requireActivity().application)
 		viewModel = ViewModelProvider(
 			this,
 			viewModelFactory
-		)[MessageModel::class.java]
+		)[InboxViewModel::class.java]
 
 
 		lifecycleScope.launch {
 			viewModel.initAsync()
-			viewModel.messageList.collect {
+		viewModel.messageList.collect {
 
 				adapter.submitList(it)
 
@@ -50,6 +53,7 @@ class InboxFragment : Fragment() {
 
 		binding.messageList.adapter = adapter
 
+//		this.findNavController().navigate(R.id.action_inboxFragment_to_messageFragment)
 
 		return binding.root
 	}

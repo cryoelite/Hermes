@@ -47,4 +47,16 @@
 		<item name="android:textSize">@dimen/time_text_size</item>
 
 	</style>
+	<style name="UserOnlineStatus">
+		<!-- Customize your theme here. -->
+		<item name="android:textColor">@color/slight_white</item>
+		<item name="android:fontFamily">@font/poppins</item>
+		<item name="android:textSize">@dimen/main_body</item>
+	</style>
+	<style name="UsernameMessage">
+		<!-- Customize your theme here. -->
+		<item name="android:textColor">@color/slight_white</item>
+		<item name="android:fontFamily">@font/poppins</item>
+		<item name="android:textSize">@dimen/text_content</item>
+	</style>
 </resources>

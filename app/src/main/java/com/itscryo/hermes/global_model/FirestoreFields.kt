@@ -16,5 +16,6 @@ data class FirestoreFields(
 	val sentTime: String= "sentTime",
 	val isRead:String="isRead",
 	val mediaFileName: String= "mediaFileName",
-	val profileImageFileName: String="profileImageFileName"
+	val profileImageFileName: String="profileImageFileName",
+	val friendList: String = "friendList"
 )

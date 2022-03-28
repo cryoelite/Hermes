@@ -1,6 +1,5 @@
-package com.itscryo.hermes.app.auth.viewmodel
+package com.itscryo.hermes.app.auth.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 

@@ -13,11 +13,11 @@ interface ILocalRepository {
 
 	suspend fun retrievePrefsAsync(): UserPreferences?
 
-	suspend fun storeImageFromURLAsync(url: String): String
+	suspend fun storeImageFromBytesAsync(imageBitmap: Bitmap): String
 
-	suspend fun retrieveImageAsync(imageLocation: String): ByteArray?
+	suspend fun retrieveImageAsync(imageLocation: String): Bitmap?
 
-	suspend fun storeMediaFromURL(url: String): String
+	suspend fun storeMedia(tempLocalPath: String): String
 
 	suspend fun retrieveMediaFromLocationAsync(mediaLocation: String): Bitmap?
 

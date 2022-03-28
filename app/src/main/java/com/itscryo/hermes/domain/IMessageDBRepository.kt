@@ -4,7 +4,13 @@ import com.itscryo.hermes.global_model.message_db_model.*
 import kotlinx.coroutines.flow.Flow
 
 interface IMessageDBRepository {
-	fun storeUserAsync(user: User, userImage: UserImage)
+	fun storeUserAsync(user: User)
+
+	fun storeUserImageAsync(userImage: UserImage)
+
+	fun updateUserAsync(user:User)
+
+	fun updateUserImage(userImage: UserImage)
 
 	fun storeMessageAsync(
 		message: Message,
@@ -21,13 +27,11 @@ interface IMessageDBRepository {
 	)
 
 
-	fun storeUserImage(userImage: UserImage)
-
 	fun storeConversation(conversation: Conversation)
 
-	fun getUserAsync(userID: Long): Flow<User>
+	fun getUserAsync(userID: String): Flow<User?>
 
-	fun getUserImageAsync(imageID: Long): Flow<UserImage>
+	fun getUserImageAsync(imageID: Long): Flow<UserImage?>
 
 
 	fun getUsersWithImagesAsync(): Flow<List<UserWithImage>>

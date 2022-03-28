@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-class MessageModel(application: Application) : AndroidViewModel(application) {
+class InboxViewModel(application: Application) : AndroidViewModel(application) {
 	lateinit var messageDBToMessage: MessageDBToMessage
 
 	lateinit var messageList: Flow<List<Message>>
@@ -26,13 +26,13 @@ class MessageModel(application: Application) : AndroidViewModel(application) {
 	}
 
 	suspend fun initAsync() {
-		val db= MessageDatabase.getInstance(getApplication<Application>().applicationContext)
+		val db= MessageDatabase.getInstance(getApplication<Application>().applicationContext).messageDBRepository
 		if (!::messageList.isInitialized) {
 			messageDBToMessage = MessageDBToMessage(
 				db,
 				getApplication<Application>().applicationContext
 			)
-			conversationList = db.messageDBRepository.getConversationsAsync()
+			conversationList = db.getConversationsAsync()
 			conversationList.collect {
 				viewModelScope.launch {
 					val messageIDs = getMessageIDs(it)

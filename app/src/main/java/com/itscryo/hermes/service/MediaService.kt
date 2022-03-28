@@ -12,7 +12,9 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
+import com.itscryo.hermes.domain.ILocalRepository
 import com.itscryo.hermes.global_model.LogTags
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,8 +23,12 @@ import java.io.File
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
+class MediaService  : Service() {
 
-class MediaService @Inject constructor(@ActivityContext val context: Context) : Service() {
+	@Inject
+	lateinit var localRepo: ILocalRepository
+
 	private val localBinder = LocalBinder()
 	private val tags = LogTags("MediaService")
 
@@ -31,18 +37,21 @@ class MediaService @Inject constructor(@ActivityContext val context: Context) : 
 		const val height = 480
 	}
 
-	inner class LocalBinder : Binder() {
+	inner class LocalBinder() : Binder() {
 
-		suspend fun getImage(imageLocation: String): ByteArray? {
+
+/*		suspend fun getImage(imageLocation: String): ByteArray? {
 			return this@MediaService.getImage(imageLocation)
+		}*/
+
+		suspend fun storeImageAndGetLocalPath(url: String): String {
+			val imageBitmap= this@MediaService.downloadImage(url) ?: throw Throwable("Failed to store image")
+			return localRepo.storeImageFromBytesAsync(imageBitmap)
 		}
 
-		suspend fun downloadImage(url: String): Bitmap? {
-			return this@MediaService.downloadImage(url)
-		}
-
-		suspend fun downloadMedia(url: String): String? {
-			return this@MediaService.downloadMedia(url)
+		suspend fun storeMediaAndGetLocalPath(url: String): String {
+			val imageTempLocalPath= this@MediaService.downloadMedia(url) ?: throw Throwable("Failed to store image")
+			return localRepo.storeMedia(imageTempLocalPath)
 		}
 
 	}
@@ -51,7 +60,7 @@ class MediaService @Inject constructor(@ActivityContext val context: Context) : 
 		return try {
 			val mediaLocation = withContext<String>(Dispatchers.IO) {
 				val downloadManager =
-					context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+					applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 				val downloadUri = Uri.parse(url)
 				val tempFileName =
 					"${GregorianCalendar.getInstance().timeInMillis}.jpg "
@@ -90,7 +99,7 @@ class MediaService @Inject constructor(@ActivityContext val context: Context) : 
 
 	private suspend fun downloadImage(url: String): Bitmap? {
 		return try {
-			val image = Glide.with(context).load(url).asDeferredAsync().await()
+			val image = Glide.with(applicationContext).load(url).asDeferredAsync().await()
 			image.toCustomBitmap()
 		} catch (e: Exception) {
 			Log.e(tags.error, e.message ?: "Failed to download image")
@@ -101,7 +110,7 @@ class MediaService @Inject constructor(@ActivityContext val context: Context) : 
 
 	private suspend fun getImage(imageLocation: String): ByteArray? {
 		return try {
-			val image = Glide.with(context).load(File(imageLocation)).asDeferredAsync()
+			val image = Glide.with(applicationContext).load(File(imageLocation)).asDeferredAsync()
 				.await()
 
 			image.toByteArray()

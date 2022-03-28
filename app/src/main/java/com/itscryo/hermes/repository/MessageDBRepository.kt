@@ -3,6 +3,7 @@ package com.itscryo.hermes.repository
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.itscryo.hermes.domain.IMessageDBRepository
 import com.itscryo.hermes.global_model.message_db_model.*
 import kotlinx.coroutines.flow.Flow
@@ -10,10 +11,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MessageDBRepository : IMessageDBRepository {
 	@Insert
-	override fun storeUserAsync(user: User, userImage: UserImage)
+	override fun storeUserAsync(user: User)
 
 	@Insert
-	override fun storeUserImage(userImage: UserImage)
+	override fun storeUserImageAsync(userImage: UserImage)
+
+
+	@Update
+	override fun updateUserAsync(user: User)
+
+	@Update
+	override fun updateUserImage(userImage: UserImage)
 
 
 	@Insert
@@ -36,10 +44,10 @@ interface MessageDBRepository : IMessageDBRepository {
 	)
 
 	@Query("Select * FROM User WHERE userID= :userID")
-	override fun getUserAsync(userID: Long): Flow<User>
+	override fun getUserAsync(userID: String): Flow<User?>
 
 	@Query("Select * FROM UserImage WHERE imageID= :imageID")
-	override fun getUserImageAsync(imageID: Long): Flow<UserImage>
+	override fun getUserImageAsync(imageID: Long): Flow<UserImage?>
 
 	@Query("Select * FROM User,UserImage")
 	override fun getUsersWithImagesAsync(): Flow<List<UserWithImage>>
@@ -52,5 +60,6 @@ interface MessageDBRepository : IMessageDBRepository {
 
 	@Query("Select * FROM Message INNER JOIN MessageMedia ON Message.messageMediaID = MessageMedia.mediaID INNER JOIN MessageText ON Message.messageTextID=MessageText.textID  where messageID IN (:ids)")
 	override fun getMessagesFromIDsAsync(ids: List<Long>): Flow<List<MessageWithContent>>
+
 
 }

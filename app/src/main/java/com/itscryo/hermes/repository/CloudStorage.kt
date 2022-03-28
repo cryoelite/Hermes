@@ -11,19 +11,12 @@ import com.itscryo.hermes.global_model.CloudStorageMetadata
 import com.itscryo.hermes.global_model.CloudStoragePaths
 import com.itscryo.hermes.global_model.LogTags
 import com.itscryo.hermes.global_model.message_db_model.MessageMedia
-import com.itscryo.hermes.global_model.message_db_model.UserImage
 import com.itscryo.hermes.service.asDeferredAsync
-import dagger.Binds
-import dagger.Module
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
-import com.itscryo.hermes.global_model.firestore_incoming_model.MessageMedia as FirestoreMedia
-import com.itscryo.hermes.global_model.firestore_incoming_model.UserImage as FirestoreUserImage
 
 /*@Module
 @InstallIn(SingletonComponent::class)
@@ -56,11 +49,14 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 	private val logTags = LogTags("CloudStorage")
 
 
-	override suspend fun storeProfileImageAndGetURL(userImage: UserImage): String {
+	override suspend fun storeProfileImageAndGetURL(
+		imageName: String,
+		imageLocalPath: String
+	): String {
 		val imagesRef = storageRef.child(cloudStoragePaths.users).child(userID.toString())
 			.child(cloudStoragePaths.profilePictures)
-		val fileRef = imagesRef.child(userImage.imageName)
-		val imageBytes = getImageBytes(userImage.imageLocalPath)
+		val fileRef = imagesRef.child(imageName)
+		val imageBytes = getImageBytes(imageLocalPath)
 			?: throw Throwable("Failed to load image")
 		val uploadTask = fileRef.putBytes(imageBytes)
 		uploadTask.addOnFailureListener {
@@ -70,9 +66,8 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 		}.addOnCompleteListener {
 			Log.i(logTags.info, "Successfully uploaded profile image")
 		}
-		val url = getProfileImage(userImage.imageName)
+		return getProfileImageURL(imageName)
 			?: throw Throwable("Failed to store image and retrieve URL")
-		return url.imageURL
 	}
 
 
@@ -89,7 +84,7 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 	}
 
 
-	override suspend fun getProfileImage(filename: String): FirestoreUserImage? {
+	override suspend fun getProfileImageURL(filename: String): String? {
 		val imagesRef = storageRef.child(cloudStoragePaths.users).child(userID.toString())
 			.child(cloudStoragePaths.profilePictures)
 		val fileRef = imagesRef.child(filename)
@@ -98,25 +93,23 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 			Log.e(logTags.error, "File doesn't exist")
 			return null
 		}
-		return FirestoreUserImage(filename, url.path.toString())
+		return url.path.toString()
 	}
 
-	override suspend fun storeMediaAndGetURL(media: MessageMedia): String {
+	override suspend fun storeMediaAndGetURL(
+		mediaFileName: String,
+		mediaLocalPath: String,
+		secondUserID: String
+	): String {
 		val mediaRef = storageRef.child(cloudStoragePaths.users).child(userID.toString())
 			.child(cloudStoragePaths.media)
-		if (media.mediaFileName == null || media.mediaLocalPath == null) {
-			Log.e(logTags.error, "No media provided")
-			throw Throwable("No media provided")
-		}
-		val fileName = media.mediaFileName as String
-		val fileLocation = media.mediaLocalPath as String
-		val fileRef = mediaRef.child(fileName)
+		val fileRef = mediaRef.child(mediaFileName)
 		val fileBytes =
-			getMediaBytes(fileLocation) ?: throw  Throwable("Failed to load media")
+			getMediaBytes(mediaLocalPath) ?: throw  Throwable("Failed to load media")
 		val mediaMetadata = storageMetadata {
 			setCustomMetadata(
 				cloudStorageMetadata.secondUserID,
-				media.secondUserIDMedia.toString()
+				secondUserID
 			)
 		}
 		val uploadTask = fileRef.putBytes(fileBytes, mediaMetadata)
@@ -127,14 +120,13 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 		}.addOnCompleteListener {
 			Log.i(logTags.info, "Successfully uploaded media")
 		}
-		val url = getMedia(fileName)
+		return getMediaURL(mediaFileName)
 			?: throw Throwable("Failed to store image and retrieve URL")
-		return url.mediaURL
 
 
 	}
 
-	override suspend fun getMedia(filename: String): FirestoreMedia? {
+	override suspend fun getMediaURL(filename: String): String? {
 		val mediaRef = storageRef.child(cloudStoragePaths.users).child(userID.toString())
 			.child(cloudStoragePaths.media)
 		val fileRef = mediaRef.child(filename)
@@ -146,7 +138,7 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 			val secondUserID =
 				metadata.getCustomMetadata(cloudStorageMetadata.secondUserID)
 					?: return null
-			return FirestoreMedia(url.path.toString(), filename, secondUserID.toLong())
+			return url.path.toString()
 		}
 	}
 }

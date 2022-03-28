@@ -18,5 +18,7 @@ data class User(
 	@PrimaryKey(autoGenerate = false) var userID: String,
 	var name: String?,
 	var userImageID: Long,
-	var email: String
+	var email: String,
+	var isOnline: Boolean,
+	var onlineTime: String,
 )

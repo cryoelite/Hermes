@@ -13,7 +13,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MainApplication : Application() {
-	@SuppressLint("ObsoleteSdkInt")
+/*	@SuppressLint("ObsoleteSdkInt")
 	private fun createNotificationChannel() {
 		// Create the NotificationChannel, but only on API 26+ because
 		// the NotificationChannel class is new and not in the support library
@@ -48,7 +48,7 @@ class MainApplication : Application() {
 			// Set the intent that will fire when the user taps the notification
 			.setContentIntent(pendingIntent)
 			.setAutoCancel(true)
-	}
+	}*/
 	override fun onCreate() {
 		super.onCreate()
 //		createNotificationChannel()
