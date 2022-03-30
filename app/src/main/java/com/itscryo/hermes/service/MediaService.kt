@@ -44,30 +44,28 @@ class MediaService  : Service() {
 			return this@MediaService.getImage(imageLocation)
 		}*/
 
-		suspend fun storeImageAndGetLocalPath(url: String): String {
+		suspend fun storeImageAndGetLocalPath(url: String, fileName: String): String {
 			val imageBitmap= this@MediaService.downloadImage(url) ?: throw Throwable("Failed to store image")
-			return localRepo.storeImageFromBytesAsync(imageBitmap)
+			return localRepo.storeImageFromBytesAsync(imageBitmap, fileName)
 		}
 
-		suspend fun storeMediaAndGetLocalPath(url: String): String {
-			val imageTempLocalPath= this@MediaService.downloadMedia(url) ?: throw Throwable("Failed to store image")
+		suspend fun storeMediaAndGetLocalPath(url: String, fileName: String): String {
+			val imageTempLocalPath= this@MediaService.downloadMedia(url, fileName) ?: throw Throwable("Failed to store image")
 			return localRepo.storeMedia(imageTempLocalPath)
 		}
 
 	}
 
-	private suspend fun downloadMedia(url: String): String? {
+	private suspend fun downloadMedia(url: String, fileName: String): String? {
 		return try {
 			val mediaLocation = withContext<String>(Dispatchers.IO) {
 				val downloadManager =
 					applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 				val downloadUri = Uri.parse(url)
-				val tempFileName =
-					"${GregorianCalendar.getInstance().timeInMillis}.jpg "
 				val request = DownloadManager.Request(downloadUri).apply {
 					setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE).setAllowedOverRoaming(
 						true
-					).setTitle(tempFileName).setDescription("")
+					).setTitle(fileName).setDescription("")
 				}
 				val downloadID = downloadManager.enqueue(request)
 				val query = DownloadManager.Query().setFilterById(downloadID)

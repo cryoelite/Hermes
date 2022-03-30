@@ -25,8 +25,6 @@ class InboxFragment : Fragment() {
 	private lateinit var viewModel: InboxViewModel;
 	private lateinit var viewModelFactory: InboxViewModelFactory
 
-	@Inject
-	lateinit var firestoreService: IFirestoreRepository
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,

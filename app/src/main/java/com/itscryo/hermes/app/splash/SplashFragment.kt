@@ -26,5 +26,5 @@ class SplashFragment : Fragment() {
 		fun newInstance() = SplashFragment()
 	}
 
-	fun onClickNext(view: View) = this.findNavController().navigate(R.id.action_splashFragment_to_authFragment)
+	private fun onClickNext(view: View) = this.findNavController().navigate(R.id.action_splashFragment_to_authFragment)
 }

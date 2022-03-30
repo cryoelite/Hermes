@@ -12,13 +12,23 @@ import com.itscryo.hermes.R
 import com.itscryo.hermes.app.launch.viewmodels.launchViewModel
 import com.itscryo.hermes.app.launch.viewmodels.launchViewModelFactory
 import com.itscryo.hermes.databinding.FragmentLaunchBinding
+import com.itscryo.hermes.domain.IFirestoreRepository
+import com.itscryo.hermes.domain.ILocalRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class launchFragment : Fragment() {
 	private lateinit var viewModel: launchViewModel;
 	private lateinit var viewModelFactory: launchViewModelFactory
+
+	@Inject
+	lateinit var localRepo: ILocalRepository
+
+	@Inject
+	lateinit var firestoreRepo: IFirestoreRepository
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +36,7 @@ class launchFragment : Fragment() {
 	): View {
 		val binding = FragmentLaunchBinding.inflate(inflater);
 		viewModelFactory =
-			launchViewModelFactory(requireActivity().application)
+			launchViewModelFactory(requireActivity().application, localRepo, firestoreRepo)
 		viewModel = ViewModelProvider(
 			this,
 			viewModelFactory
@@ -38,7 +48,6 @@ class launchFragment : Fragment() {
 
 	override fun onStart() {
 		super.onStart()
-		// Do all the startup tasks
 		viewLifecycleOwner.lifecycleScope.launch {
 			viewModel.startupTasks()
 			navigate()
@@ -48,9 +57,8 @@ class launchFragment : Fragment() {
 	companion object {
 		fun newInstance() = launchFragment()
 	}
-//TODO REVERT boolean check
 	private fun navigate() {
-		if (!viewModel.isLoggedIn)
+		if (viewModel.isLoggedIn)
 			this.findNavController()
 				.navigate(R.id.action_launchFragment_to_inboxFragment)
 		else

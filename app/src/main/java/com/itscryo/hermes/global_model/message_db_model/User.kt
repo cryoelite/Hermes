@@ -1,9 +1,7 @@
 package com.itscryo.hermes.global_model.message_db_model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
+import java.util.*
 
 @Entity(
 	foreignKeys = [ForeignKey(
@@ -20,5 +18,14 @@ data class User(
 	var userImageID: Long,
 	var email: String,
 	var isOnline: Boolean,
-	var onlineTime: String,
-)
+	@ColumnInfo(name = "onlineTime", defaultValue = "(datetime('now'))")
+	var userOnlineTime: String?= null
+) {
+
+	@Ignore
+	var onlineTime: Date = GregorianCalendar.getInstance().time
+		set(value) {
+			field = value
+			userOnlineTime = value.toString()
+		}
+}

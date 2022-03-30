@@ -26,23 +26,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class LocalRepoModule {
 
-	@Singleton
 	@Binds
-	abstract fun provideLocalRepo(localRepository: LocalRepository): ILocalRepository
+	abstract fun bindsLocalRepo(localRepository: LocalRepository): ILocalRepository
 }
 
 
-class LocalRepository @Inject constructor(@ActivityContext val context: Context) :
+class LocalRepository @Inject constructor() :
 	ILocalRepository {
 	private val localFolders = LocalFolders()
 	private val logTags = LogTags("LocalRepo")
 	private val sharedPrefKeys = SharedPrefKeys()
 
 
-	override suspend fun storeUserCredAsync(userID: String) {
+	override suspend fun storeUserCredAsync(userID: String, context: Context) {
 
 		withContext(Dispatchers.Default) {
-			val sharedPrefs = getEncryptedSharedPrefs()
+			val sharedPrefs = getEncryptedSharedPrefs(context)
 			with(sharedPrefs.edit())
 			{
 				putString(sharedPrefKeys.userID, userID)
@@ -52,7 +51,7 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 
 	}
 
-	private fun getEncryptedSharedPrefs(): SharedPreferences {
+	private fun getEncryptedSharedPrefs(context: Context): SharedPreferences {
 		val masterKey = MasterKey.Builder(context).build()
 
 		return EncryptedSharedPreferences.create(
@@ -64,10 +63,10 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 		)
 	}
 
-	override suspend fun retrieveUserCredAsync(): String? {
+	override suspend fun retrieveUserCredAsync(context: Context): String? {
 		return withContext<String?>(Dispatchers.Default) {
 			try {
-				val sharedPrefs = getEncryptedSharedPrefs()
+				val sharedPrefs = getEncryptedSharedPrefs(context)
 				val data =
 					sharedPrefs.getString(sharedPrefKeys.userID, null)
 				if (data != null) {
@@ -97,14 +96,14 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 
 	}
 
-	private fun getSharedPrefs(): SharedPreferences {
+	private fun getSharedPrefs(context: Context): SharedPreferences {
 		return context.getSharedPreferences(sharedPrefKeys.spFileName, Context.MODE_PRIVATE)
 	}
 
-	override suspend fun storePrefsAsync(userPrefs: UserPreferences) {
+	override suspend fun storePrefsAsync(userPrefs: UserPreferences, context: Context) {
 		withContext(Dispatchers.Default)
 		{
-			val sharedPrefs = getSharedPrefs()
+			val sharedPrefs = getSharedPrefs(context)
 			with(sharedPrefs.edit()) {
 				putString(sharedPrefKeys.appTheme, userPrefs.appTheme)
 				putString(sharedPrefKeys.appLanguage, userPrefs.appLanguage)
@@ -113,10 +112,10 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 		}
 	}
 
-	override suspend fun retrievePrefsAsync(): UserPreferences? {
+	override suspend fun retrievePrefsAsync(context: Context): UserPreferences? {
 		return withContext<UserPreferences?>(Dispatchers.Default) {
 			try {
-				val sharedPrefs = getSharedPrefs()
+				val sharedPrefs = getSharedPrefs(context)
 				val appTheme =
 					sharedPrefs.getString(sharedPrefKeys.appTheme, null)
 				val appLanguage =
@@ -148,16 +147,14 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 	}
 
 
-	override suspend fun storeImageFromBytesAsync(imageBitmap: Bitmap): String {
+	override suspend fun storeImageFromBytesAsync(imageBitmap: Bitmap, imageFileName: String): String {
 		val imagePath =withContext<String?>(Dispatchers.IO) {
 				try {
-					val imageFIlename =
-						GlobalEncryption().generateRandomString() + ".jpg"
 					val storageDir = File(localFolders.profilePictureFolder)
 					if (!storageDir.exists()) {
 						storageDir.mkdirs()
 					}
-					val imageFile = File(storageDir, imageFIlename)
+					val imageFile = File(storageDir, imageFileName)
 
 					val fOut = FileOutputStream(imageFile)
 					imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
@@ -203,6 +200,7 @@ class LocalRepository @Inject constructor(@ActivityContext val context: Context)
 						location.inputStream(),
 						destination.outputStream()
 					)
+					location.delete()
 					Log.i(logTags.info, "Successfully stored media from URL")
 				} catch (e: Exception) {
 					Log.e(logTags.error, "Failed to store media from URL")

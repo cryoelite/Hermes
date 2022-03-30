@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 class InboxViewModel(application: Application) : AndroidViewModel(application) {
 	lateinit var messageDBToMessage: MessageDBToMessage
 
-	lateinit var messageList: Flow<List<Message>>
+	lateinit var messageList: Flow<List<Message>?>
 
-	private lateinit var conversationList: Flow<List<Conversation>>
+	private lateinit var conversationList: Flow<List<Conversation>?>
 
 
 	private suspend fun getMessageIDs(conversation: List<Conversation>): List<Long> {
@@ -32,13 +32,17 @@ class InboxViewModel(application: Application) : AndroidViewModel(application) {
 				db,
 				getApplication<Application>().applicationContext
 			)
-			conversationList = db.getConversationsAsync()
+			conversationList = db.getConversationListAsync()
 			conversationList.collect {
 				viewModelScope.launch {
-					val messageIDs = getMessageIDs(it)
-					val messages =
-						messageDBToMessage.getMessagesFromIDs(messageIDs)
-					messageList = flowOf(messages)
+					it?.let {
+						val messageIDs = getMessageIDs(it)
+						val messages =
+							messageDBToMessage.getMessagesFromIDs(
+								messageIDs
+							)
+						messageList = flowOf(messages)
+					}
 				}
 			}
 

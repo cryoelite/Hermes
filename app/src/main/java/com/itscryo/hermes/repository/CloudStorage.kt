@@ -10,7 +10,6 @@ import com.itscryo.hermes.domain.ILocalRepository
 import com.itscryo.hermes.global_model.CloudStorageMetadata
 import com.itscryo.hermes.global_model.CloudStoragePaths
 import com.itscryo.hermes.global_model.LogTags
-import com.itscryo.hermes.global_model.message_db_model.MessageMedia
 import com.itscryo.hermes.service.asDeferredAsync
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -72,7 +71,10 @@ class CloudStorage @AssistedInject constructor(@Assisted override var userID: St
 
 
 	private suspend fun getImageBytes(imageLocation: String): ByteArray? {
-		return localRepository.retrieveImageAsync(imageLocation)
+		val imageBitmap = localRepository.retrieveImageAsync(imageLocation) ?: return null
+		val stream = ByteArrayOutputStream()
+		imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+		return stream.toByteArray()
 	}
 
 	private suspend fun getMediaBytes(mediaLocation: String): ByteArray? {
