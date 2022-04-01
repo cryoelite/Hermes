@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +21,8 @@ import com.itscryo.hermes.databinding.FragmentAuthBinding
 import com.itscryo.hermes.domain.IAuthRepository
 import com.itscryo.hermes.domain.IFirestoreRepository
 import com.itscryo.hermes.domain.ILocalRepository
+import com.itscryo.hermes.global_model.LogTags
 import com.itscryo.hermes.global_model.message_db_model.UserWithImage
-import com.itscryo.hermes.repository.FirestoreRepository
 import com.itscryo.hermes.repository.MessageDBRepository
 import com.itscryo.hermes.service.MessageDBService
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,8 +35,10 @@ class AuthFragment : Fragment() {
 	private lateinit var binding: FragmentAuthBinding
 	private lateinit var viewModel: AuthViewModel
 	private lateinit var viewModelFactory: AuthViewModelFactory
+
 	@Inject
 	lateinit var authRepo: IAuthRepository
+
 	@Inject
 	lateinit var localRepo: ILocalRepository
 
@@ -47,6 +50,8 @@ class AuthFragment : Fragment() {
 	@Inject
 	lateinit var firestoreRepository: IFirestoreRepository
 
+
+	private val tag = LogTags("Auth Fragment")
 	private val connection = object : ServiceConnection {
 		override fun onServiceConnected(className: ComponentName, service: IBinder) {
 			val binder = service as MessageDBService.LocalBinder
@@ -69,7 +74,15 @@ class AuthFragment : Fragment() {
 
 	private fun bind() {
 		Intent(requireContext(), MessageDBService::class.java).also { intent ->
-			requireContext().bindService(intent, connection, Context.BIND_AUTO_CREATE)
+			{
+				requireContext().startService(intent)
+				requireContext().bindService(
+					intent,
+					connection,
+					Context.BIND_AUTO_CREATE
+				)
+
+			}
 		}
 	}
 
@@ -90,20 +103,29 @@ class AuthFragment : Fragment() {
 
 
 	private fun submitButtonHandler(view: View) {
-		val email = binding.editEmail.text.toString()
-		val pass = binding.editPassword.text.toString()
+		var email = binding.editEmail.text.toString()
+		var pass = binding.editPassword.text.toString()
+		email = "arvindsagar880@gmail.com"
+		pass = "Bracket880-HS"
 		lifecycleScope.launch {
 			try {
 				val result = authRepo.signInAsync(email, pass).await()
 				localRepo.storeUserCredAsync(result, requireContext())
 				withBind {
-					messageDBService?.generateUser(email,result)
+					Log.i(tag.info, "MessageDB is ${messageDBService == null}")
+					messageDBService?.generateUser(email, result)
 				}
-				if(firestoreRepository.getUserInfo(result)==null)
-				{
-					val user= db.getUserAsync(result).first() ?: throw Throwable("Failed to get stored user")
-					val image= db.getUserImageAsync(user.userImageID).first() ?: throw Throwable("Failed to get user image")
-					firestoreRepository.storeUserInfo(UserWithImage(user,image))
+				if (firestoreRepository.getUserInfo(result) == null) {
+					val user = db.getUserAsync(result).first()
+						?: throw Throwable("Failed to get stored user")
+					val image = db.getUserImageAsync(user.userImageID).first()
+						?: throw Throwable("Failed to get user image")
+					firestoreRepository.storeUserInfo(
+						UserWithImage(
+							user,
+							image
+						)
+					)
 				}
 
 				navigateToInbox()
@@ -114,12 +136,13 @@ class AuthFragment : Fragment() {
 		}
 	}
 
-	private fun navigateToInbox(){
+	private fun navigateToInbox() {
 		this.findNavController()
 			.navigate(R.id.action_authFragment_to_inboxFragment)
 	}
+
 	override fun onDestroy() {
-		if(messageDBService!=null){
+		if (messageDBService != null) {
 			unbind()
 		}
 		super.onDestroy()

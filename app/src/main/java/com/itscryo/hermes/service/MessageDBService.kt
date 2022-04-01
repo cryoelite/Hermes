@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
+import com.itscryo.hermes.global_model.LogTags
 import com.itscryo.hermes.global_model.message_db_model.User
 import com.itscryo.hermes.global_model.message_db_model.UserImage
 import com.itscryo.hermes.repository.MessageDBRepository
@@ -24,6 +26,7 @@ class MessageDBService() : Service() {
 	@Inject
 	lateinit var db: MessageDBRepository
 
+	private val tags: LogTags=LogTags("MessageDBService")
 
 	private lateinit var mediaServiceBinder: MediaService.LocalBinder
 	private var isMediaServiceBound = false
@@ -79,6 +82,7 @@ class MessageDBService() : Service() {
 			userImageID = imageDB.imageID as Long,
 			name = null,
 		)
+		Log.i(tags.info,"Storing user")
 		db.storeUserAsync(user)
 	}
 

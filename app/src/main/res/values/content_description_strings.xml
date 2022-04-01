@@ -7,6 +7,8 @@
 	<string name="settings_icon_desc">Settings</string>
 	<string name="media_service_desc">Service to handle media in Hermes</string>
 	<string name="init_service_desc">Startup service for Hermes</string>
+	<string name="messagedb_service_desc">Database service for Hermes</string>
+
 
 
 

@@ -36,6 +36,10 @@
 			  android:name=".service.InitializerService"
 			  android:description="@string/init_service_desc"
 			  android:exported="false" />
+		<service
+			  android:name=".service.MessageDBService"
+			  android:description="@string/messagedb_service_desc"
+			  android:exported="false" />
 	</application>
 
 </manifest>

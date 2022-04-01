@@ -52,7 +52,7 @@ class LocalRepository @Inject constructor() :
 	}
 
 	private fun getEncryptedSharedPrefs(context: Context): SharedPreferences {
-		val masterKey = MasterKey.Builder(context).build()
+		val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
 		return EncryptedSharedPreferences.create(
 			context,
